@@ -1,5 +1,3 @@
-from typing import Tuple
-
 import pygame
 
 
@@ -52,3 +50,9 @@ class SystemView:
         elif key == pygame.K_UP:
             self.update_current_item(-1)
         self.display_menu()
+
+    def choose_item(self):
+        if self.current_item == self.items[2]:
+            pygame.quit()
+            # clear later
+
