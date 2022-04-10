@@ -5,3 +5,4 @@ class State(Enum):
     inventory = auto()
     menu = auto()
     game = auto()
+    exit = auto()
