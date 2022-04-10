@@ -26,7 +26,7 @@ class App:
 
     def __init__(self):
         pygame.init()
-        self.cur_state = State.game
+        self.cur_state = State.menu
         self.game_handler = GameHandler()
         self.inventory_handler = InventoryHandler()
 
@@ -35,9 +35,8 @@ class App:
 
         self.level_loader = DefaultLeverLoader(block_width=self.BLOCK_WIDTH, block_height=self.BLOCK_HEIGHT)
         self.game_model = None
-        
-        self.system_handler = SystemHandler()
 
+        self.system_handler = SystemHandler()
 
     def run(self):
         """
@@ -49,7 +48,7 @@ class App:
             if self.cur_state == State.menu:
                 self.cur_state = self.system_handler.run()
             elif self.cur_state == State.game:
-                #TODO bootstrap game mode from menu
+                # TODO bootstrap game mode from menu
                 self.game_view.view_load(self.game_model.get_all_entities())
                 self.cur_state = self.game_handler.run(self.game_model)
             elif self.cur_state == State.inventory:

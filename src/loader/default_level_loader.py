@@ -15,8 +15,8 @@ class DefaultLeverLoader:
         Класс DefaultLeverLoader ответственен за загрузку уровеней.
         Извлекает необходмую информацию из json файлов согласно внутреннему инварианту.
     """
-    PATH_TO_LEVELS = "src/levels"
-    PATH_TO_TEXTURES = 'src/textures'
+    PATH_TO_LEVELS = "levels"
+    PATH_TO_TEXTURES = 'textures'
 
     def __init__(self, *, block_width, block_height):
         self.block_width = block_width
