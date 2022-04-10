@@ -1,0 +1,2 @@
+class InventoryView:
+    pass
