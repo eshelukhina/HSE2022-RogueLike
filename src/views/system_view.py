@@ -4,7 +4,14 @@ import pygame
 class SystemView:
     def __init__(self):
         self.items = ["Start", "Learn about", "Exit"]
+        self.windows = ["Menu", "Save slots", "Choose job"]
+        self.save_slots = ["Save slot 1", "Save slot 2"]
+        self.save_slots_info = None
+
         self.current_item = self.items[0]
+        self.current_window = self.windows[0]
+        self.current_slot = self.save_slots[0]
+
         self.res = (720, 720)
         self.screen = pygame.display.set_mode(self.res)
         self.color = (255, 255, 255)
@@ -40,19 +47,42 @@ class SystemView:
                 pygame.draw.rect(self.screen, self.color_dark, button[1])
             self.screen.blit(button[0], (button[1].x + button[1].width / 3, button[1].y + button[1].height / 2))
 
-    def update_current_item(self, direction):
-        index = self.items.index(self.current_item)
-        self.current_item = self.items[(index + direction) % len(self.items)]
+    def update_current_elem(self, direction, elem, arr):
+        index = arr.index(elem)
+        elem = arr[(index + direction) % len(arr)]
 
-    def move_cursor(self, key):
+    def move_cursor_menu(self, key):
         if key == pygame.K_DOWN:
-            self.update_current_item(1)
+            self.update_current_elem(1, self.current_item, self.items)
         elif key == pygame.K_UP:
-            self.update_current_item(-1)
+            self.update_current_elem(-1, self.current_item, self.items)
         self.display_menu()
 
-    def choose_item(self):
-        if self.current_item == self.items[2]:
-            pygame.quit()
-            # clear later
+    def move_cursor_save_slots(self, key):
+        if key == pygame.K_DOWN:
+            self.update_current_elem(1, self.current_slot, self.save_slots)
+        elif key == pygame.K_UP:
+            self.update_current_elem(-1, self.current_slot, self.save_slots)
+        self.display_saving_slots()
 
+    def move_cursor(self, key):
+        if self.current_window == "Menu":
+            self.move_cursor_menu(key)
+        if self.current_window == "Save slots":
+            self.move_cursor_save_slots(key)
+
+    def display_saving_slots(self, slots=None):
+        self.screen.fill((60, 25, 60))
+        if slots is not None:
+            self.save_slots_info = slots
+        for slot in self.save_slots_info:
+            if slot is None:
+
+        pygame.display.update()
+
+    def press_exit(self):
+        pygame.quit()
+        # clear later
+
+    def press_start(self, slots):
+        self.display_saving_slots(slots)
