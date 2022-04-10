@@ -1,5 +1,8 @@
-
 class InventoryHandler:
+    """
+    Класс ответственен за обработку взаимодействия с инвентарем
+    """
+
     def run_event(self, key_event):
-        #TODO add implementation
-        self.game_view.view_load()
+        # TODO добавить реализацию
+        pass

@@ -1,24 +1,49 @@
+from typing import List
+
+from entities.cell import Cell
+from entities.enemy import Enemy
+from entities.entity import Entity
 from entities.hero import Hero
 
 
 class GameModel:
-    def __init__(self, cells, hero, enemies):
-        self.cells = cells
-        self.hero: Hero = hero
-        self.enemies = enemies
+    """
+    Хранит все элементы карты: различные виды блоков, вражеских существ и героя
+    """
 
-    def get_all_entities(self):
+    def __init__(self, cells, hero, enemies):
+        self.cells: List[Cell] = cells
+        self.hero: Hero = hero
+        self.enemies: List[Enemy] = enemies
+
+    def get_all_entities(self) -> List[Entity]:
+        """
+        Получить все объекты
+        :return: список всех элементов карты
+        """
         return self.get_cells() + self.get_enemies() + ([] if self.hero is None else [self.hero])
 
-    def get_cells(self):
+    def get_cells(self) -> List[Cell]:
+        """
+        Получить элементы карты
+        :return: список блоков карты
+        """
         if self.cells is None:
             return []
         return self.cells
 
-    def get_hero(self):
+    def get_hero(self) -> Hero:
+        """
+        Получить главного героя
+        :return: главный герой
+        """
         return self.hero
 
-    def get_enemies(self):
+    def get_enemies(self) -> List[Enemy]:
+        """
+        Получить всех вражеских существ
+        :return: список вражеских существ
+        """
         if self.enemies is None:
             return []
         return self.enemies

@@ -1,12 +1,15 @@
 import pygame
 
 from entities.cell import CellType
+from entities.hero import Hero
 from model.game_model import GameModel
 from state import State
-from entities.hero import Hero
 
 
 class GameHandler:
+    """
+    Класс ответственный за обработку game event'ов
+    """
     SPEED = 48
 
     def __check_collision__(self, hero, cells):
@@ -36,9 +39,14 @@ class GameHandler:
         hero.move(shift_x, shift_y)
 
     def run(self, game_model: GameModel) -> State:
+        """
+        Обрабатывает нажатия с клавиатуры
+        :param game_model: обьекты карты
+        :return: состояние игры
+        """
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return State.exit
-            elif event.type  == pygame.KEYDOWN:
+            elif event.type == pygame.KEYDOWN:
                 self.__move_hero__(event.key, game_model.get_hero(), game_model.get_cells())
         return State.game

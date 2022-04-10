@@ -12,6 +12,9 @@ class CellType(enum.Enum):
 
 
 class Cell(Entity):
+    """
+    Элемент карты
+    """
     def __init__(self, *, x: int, y: int, cell_type: CellType, image: pygame.image):
         self.cell_type = cell_type
         super().__init__(x, y, image)

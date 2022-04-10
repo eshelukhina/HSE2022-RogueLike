@@ -3,6 +3,9 @@ import pygame
 
 
 class Entity(pygame.sprite.Sprite):
+    """
+    Базовый класс, от которого наследуется любой отображаемый на игровом экране обьект.
+    """
     def __init__(self, x: float, y: float, image: pygame.image):
         pygame.sprite.Sprite.__init__(self)
         self.image = image
@@ -10,4 +13,9 @@ class Entity(pygame.sprite.Sprite):
         self.rect = self.rect.move(x, y)
 
     def draw(self, screen):
+        """
+        Метод для отрисовки объекта
+        :param screen: экран
+        :return: None
+        """
         screen.blit(self.image, self.rect)

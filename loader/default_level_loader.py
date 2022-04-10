@@ -11,6 +11,10 @@ import os
 
 
 class DefaultLeverLoader:
+    """
+        Класс DefaultLeverLoader ответственен за загрузку уровеней.
+        Извлекает необходмую информацию из json файлов согласно внутреннему инварианту.
+    """
     PATH_TO_LEVELS = "levels"
     PATH_TO_TEXTURES = 'textures'
 
@@ -55,6 +59,10 @@ class DefaultLeverLoader:
         raise NotImplemented()
 
     def load(self, level_name: str) -> GameModel:
+        """
+        :param level_name: название уровня
+        :return: модель уровня, содержащую все считаные из файла обьекты
+        """
         level_file = os.path.join(self.PATH_TO_LEVELS, level_name + '.json')
         with open(level_file, 'r') as level:
             info = json.load(level)

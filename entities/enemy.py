@@ -1,4 +1,8 @@
 from entities.entity import Entity
 
-class Enemy:
+
+class Enemy(Entity):
+    """
+    Класс вражеских существ
+    """
     pass

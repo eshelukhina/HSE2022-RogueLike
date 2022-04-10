@@ -11,6 +11,9 @@ from view.inventory_view import InventoryView
 
 
 class App:
+    """
+    Главный класс, ответственный за запуск игры
+    """
     WINDOW_SIZE = (720, 528)
     BLOCK_WIDTH = 48
     BLOCK_HEIGHT = 48
@@ -30,6 +33,10 @@ class App:
 
 
     def run(self):
+        """
+        Запуск игры
+        :return: None
+        """
         self.game_model = self.level_loader.load('default')
         while self.cur_state != State.exit:
             if self.cur_state == State.menu:
@@ -40,6 +47,7 @@ class App:
                 self.cur_state = self.game_handler.run(self.game_model)
             elif self.cur_state == State.inventory:
                 pass
+        pygame.quit()
 
 
 if __name__ == '__main__':
