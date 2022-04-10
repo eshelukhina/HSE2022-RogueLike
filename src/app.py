@@ -1,17 +1,17 @@
 import pygame
 
-# from src.handler.game_handler import GameHandler
-from src.handler.game_handler import GameHandler
+# from src.handlers.game_handler import GameHandler
+from src.handlers.game_handler import GameHandler
 from src.loader.default_level_loader import DefaultLeverLoader
-from src.view.game_view import GameView
+from src.views.game_view import GameView
 from src.state import State
-# from src.handler import GameHandler
-from src.handler.inventory_handler import InventoryHandler
+# from src.handlers import GameHandler
+from src.handlers.inventory_handler import InventoryHandler
 
 # from src.loader.default_level_loader import DefaultLeverLoader
 
-# from src.view import GameView
-from src.view.inventory_view import InventoryView
+# from src.views import GameView
+from src.views.inventory_view import InventoryView
 
 
 class App:
