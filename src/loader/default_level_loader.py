@@ -1,10 +1,10 @@
 import pygame.image
 
-from model.game_model import GameModel
+from src.model.game_model import GameModel
 
 from typing import List
-from entities.hero import Hero
-from entities.cell import Cell, CellType
+from src.entities.hero import Hero
+from src.entities.cell import Cell, CellType
 
 import json
 import os
@@ -15,8 +15,8 @@ class DefaultLeverLoader:
         Класс DefaultLeverLoader ответственен за загрузку уровеней.
         Извлекает необходмую информацию из json файлов согласно внутреннему инварианту.
     """
-    PATH_TO_LEVELS = "levels"
-    PATH_TO_TEXTURES = 'textures'
+    PATH_TO_LEVELS = "src/levels"
+    PATH_TO_TEXTURES = 'src/textures'
 
     def __init__(self, *, block_width, block_height):
         self.block_width = block_width

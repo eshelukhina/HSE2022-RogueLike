@@ -1,5 +1,4 @@
-import pygame
-from entities.entity import Entity
+from src.entities.entity import Entity
 
 
 class Hero(Entity):

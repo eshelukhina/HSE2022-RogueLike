@@ -1,9 +1,9 @@
 from typing import List
 
-from entities.cell import Cell
-from entities.enemy import Enemy
-from entities.entity import Entity
-from entities.hero import Hero
+from src.entities.cell import Cell
+from src.entities.enemy import Enemy
+from src.entities.entity import Entity
+from src.entities.hero import Hero
 
 
 class GameModel:

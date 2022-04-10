@@ -1,9 +1,9 @@
 import pygame
 
-from entities.cell import CellType
-from entities.hero import Hero
-from model.game_model import GameModel
-from state import State
+from src.entities.cell import CellType
+from src.entities.hero import Hero
+from src.model.game_model import GameModel
+from src.state import State
 
 
 class GameHandler:
