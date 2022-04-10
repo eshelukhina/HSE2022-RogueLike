@@ -12,6 +12,7 @@ from src.handlers.inventory_handler import InventoryHandler
 
 # from src.views import GameView
 from src.views.inventory_view import InventoryView
+from src.handlers.system_handler import SystemHandler
 
 
 class App:
@@ -34,6 +35,8 @@ class App:
 
         self.level_loader = DefaultLeverLoader(block_width=self.BLOCK_WIDTH, block_height=self.BLOCK_HEIGHT)
         self.game_model = None
+        
+        self.system_handler = SystemHandler()
 
 
     def run(self):
@@ -44,7 +47,7 @@ class App:
         self.game_model = self.level_loader.load('default')
         while self.cur_state != State.exit:
             if self.cur_state == State.menu:
-                pass
+                self.cur_state = self.system_handler.run()
             elif self.cur_state == State.game:
                 #TODO bootstrap game mode from menu
                 self.game_view.view_load(self.game_model.get_all_entities())
