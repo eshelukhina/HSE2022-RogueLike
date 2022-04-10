@@ -196,7 +196,11 @@ class SystemView:
         self.current_save_slots_state = "Reset"
         self.display_saving_slots(slots)
 
-    def press_choose_reset_save_slot(self):
+    def press_choose_reset_save_slot(self) -> None:
+        """
+        Стирание выбранного слота
+        :return: None
+        """
         self.current_slot = None
         if self.save_slots_info is not None:
             if self.save_slots[0] == self.current_slot:

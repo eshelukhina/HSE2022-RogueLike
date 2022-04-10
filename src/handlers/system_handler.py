@@ -6,6 +6,9 @@ from src.views.system_view import SystemView
 
 
 class SystemHandler:
+    """
+    Отвечает за работу с главным меню(Menu)
+    """
     def __init__(self):
         self.slots = []
         self.current_item = "Start"
@@ -14,7 +17,11 @@ class SystemHandler:
         self.save_slots = SaveSlot().save_slots
         self.current_state = State.menu
 
-    def run(self):
+    def run(self) -> State:
+        """
+        Определение и вызов обработки Event'ов
+        :return: State
+        """
         for key_event in pygame.event.get():
             if key_event.type == pygame.QUIT:
                 # no more for this iteration
