@@ -1,16 +1,12 @@
 import pygame
 
-# from src.handlers.game_handler import GameHandler
 from src.handlers.game_handler import GameHandler
 from src.loader.default_level_loader import DefaultLeverLoader
 from src.views.game_view import GameView
 from src.state import State
-# from src.handlers import GameHandler
+
 from src.handlers.inventory_handler import InventoryHandler
 
-# from src.loader.default_level_loader import DefaultLeverLoader
-
-# from src.views import GameView
 from src.views.inventory_view import InventoryView
 from src.handlers.system_handler import SystemHandler
 
@@ -50,7 +46,7 @@ class App:
             elif self.cur_state == State.game:
                 # TODO bootstrap game mode from menu
                 self.game_view.view_load(self.game_model.get_all_entities())
-                self.cur_state = self.game_handler.run(self.game_model)
+                self.cur_state = self.game_handler.run(pygame.event.get(), self.game_model)
             elif self.cur_state == State.inventory:
                 pass
         pygame.quit()

@@ -2,7 +2,6 @@ from typing import List, Tuple
 
 import pygame
 
-# from src.entities import Entity
 from src.entities.entity import Entity
 
 

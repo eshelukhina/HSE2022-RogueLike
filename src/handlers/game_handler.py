@@ -38,13 +38,13 @@ class GameHandler:
                 shift_y = 0
         hero.move(shift_x, shift_y)
 
-    def run(self, game_model: GameModel) -> State:
+    def run(self, events, game_model: GameModel) -> State:
         """
         Обрабатывает нажатия с клавиатуры
         :param game_model: обьекты карты
         :return: состояние игры
         """
-        for event in pygame.event.get():
+        for event in events:
             if event.type == pygame.QUIT:
                 return State.exit
             elif event.type == pygame.KEYDOWN:
