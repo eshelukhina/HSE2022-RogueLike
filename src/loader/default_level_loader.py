@@ -5,6 +5,7 @@ from src.entities.cell import Cell, CellType
 from src.entities.hero import Hero
 from src.entities.enemy import Enemy
 from src.entities.passive_enemy import PassiveEnemy
+from src.entities.coward_enemy import CowardEnemy
 from src.model.game_model import GameModel
 
 
@@ -17,6 +18,13 @@ def __load_passive_enemy__(enemy_info):
     health, cell_pos, image_key, damage, exp_gain = __load_base_enemy_info__(enemy_info)
     return PassiveEnemy(
         health=health, cell_pos=cell_pos,
+        image_key=image_key, damage=damage, exp_gain=exp_gain)
+
+def __load_coward_enemy__(enemy_info):
+    health, cell_pos, image_key, damage, exp_gain = __load_base_enemy_info__(enemy_info)
+    scare_radius = enemy_info['scare_radius']
+    return CowardEnemy(
+        health=health, cell_pos=cell_pos, scare_radius=scare_radius,
         image_key=image_key, damage=damage, exp_gain=exp_gain)
 
 
@@ -35,7 +43,8 @@ class DefaultLeverLoader:
         '1': CellType.Wall
     }
     STRATEGY_TO_ENEMY = {
-        'passive': __load_passive_enemy__
+        'passive': __load_passive_enemy__,
+        'coward': __load_coward_enemy__
     }
 
     def __load_cells__(self, info, images):

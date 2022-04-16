@@ -83,5 +83,7 @@ class GameHandler:
                         for dead_enemy in dead_enemies:
                             hero.add_exp(dead_enemy.exp_gain)
                         self.game_model.enemies = list(filter(lambda e: e not in dead_enemies, enemies))
-            self.print_game()
+                for enemy in enemies:
+                    enemy.move(hero, enemies, cells)
+        self.print_game()
         return State.GAME

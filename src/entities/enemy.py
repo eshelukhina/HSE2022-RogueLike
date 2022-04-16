@@ -9,5 +9,5 @@ class Enemy:
         self.damage = damage
         self.exp_gain = exp_gain
 
-    def move(self):
+    def move(self, hero, enemies, cells):
         pass
