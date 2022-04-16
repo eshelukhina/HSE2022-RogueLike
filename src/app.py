@@ -1,9 +1,9 @@
 import pygame
 
 from src.config import Config
-from src.entities.inventory import Inventory
 from src.handlers.game_handler import GameHandler
 from src.handlers.inventory_handler import InventoryHandler
+from src.entities.inventory import Inventory
 from src.handlers.system_handler import SystemHandler
 from src.loader.default_level_loader import DefaultLeverLoader
 from src.state import State
@@ -50,7 +50,7 @@ class App:
                 elif self.cur_state == State.GAME:
                     self.cur_state = self.game_handler.run(event)
                 elif self.cur_state == State.INVENTORY:
-                    self.cur_state = self.inventory_handler.run(event)
+                    pass
         pygame.quit()
 
 
