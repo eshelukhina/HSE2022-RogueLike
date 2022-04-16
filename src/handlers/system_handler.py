@@ -2,8 +2,9 @@ import pygame
 
 from src.config import Config
 from src.save_slot import SaveSlot
-from src.state import State
 from src.views.system_view import SystemView
+from src.state import State
+from src import state
 
 
 class SystemHandler:
@@ -18,10 +19,9 @@ class SystemHandler:
         self.save_slots = SaveSlot().save_slots
         self.current_state = State.MENU
 
-    def run(self, event) -> State:
+    def run(self, event):
         """
         Определение и вызов обработки Event'ов
-        :return: State
         """
         if event.type == pygame.QUIT:
             # no more for this iteration
@@ -42,5 +42,5 @@ class SystemHandler:
                     if self.system_view.current_save_slots_state == "Start":
                         self.current_state = State.GAME
                     elif self.system_view.current_save_slots_state == "Reset":
-                        self.save_slots = self.system_view.press_choose_reset_save_slot()
+                        self.system_view.press_choose_reset_save_slot()
         return self.current_state

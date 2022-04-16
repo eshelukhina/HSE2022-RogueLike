@@ -1,10 +1,23 @@
 import json
 import os
 from typing import Dict
-
 from src.entities.cell import Cell, CellType
 from src.entities.hero import Hero
+from src.entities.enemy import Enemy
+from src.entities.passive_enemy import PassiveEnemy
 from src.model.game_model import GameModel
+
+
+def __load_base_enemy_info__(enemy_info):
+    return (enemy_info['health'], enemy_info['position'],
+           enemy_info['image_key'], enemy_info['damage'], enemy_info['exp_gain'])
+
+
+def __load_passive_enemy__(enemy_info):
+    health, cell_pos, image_key, damage, exp_gain = __load_base_enemy_info__(enemy_info)
+    return PassiveEnemy(
+        health=health, cell_pos=cell_pos,
+        image_key=image_key, damage=damage, exp_gain=exp_gain)
 
 
 class DefaultLeverLoader:
@@ -20,6 +33,9 @@ class DefaultLeverLoader:
     CELL_TYPES_DICT = {
         '0': CellType.Empty,
         '1': CellType.Wall
+    }
+    STRATEGY_TO_ENEMY = {
+        'passive': __load_passive_enemy__
     }
 
     def __load_cells__(self, info, images):
@@ -55,10 +71,20 @@ class DefaultLeverLoader:
         image_key = hero_info['image_key']
         if image_key not in images:
             raise ValueError(f'Image with key {image_key} is unknown')
-        return Hero(cell_pos=(hero_cell_x, hero_cell_y), image_key=image_key)
+        health = hero_info['health']
+        exp = hero_info['exp']
+        damage = hero_info['damage']
+        return Hero(health=health, max_health=health, exp=exp, level=0,
+                    cell_pos=(hero_cell_x, hero_cell_y), image_key=image_key, damage=damage)
 
-    def __load_enemies__(self):
-        raise NotImplemented()
+    def __load_enemies__(self, info):
+        enemies_info = info['enemies']
+        enemies = []
+        for enemy_info in enemies_info:
+            strategy = enemy_info['strategy']
+            enemy: Enemy = self.STRATEGY_TO_ENEMY[strategy](enemy_info)
+            enemies.append(enemy)
+        return enemies
 
     def __load_images__(self, info) -> Dict[str, str]:
         images_info = info['images']
@@ -79,5 +105,6 @@ class DefaultLeverLoader:
             info = json.load(level)
             images = self.__load_images__(info)
             cells_dict = self.__load_cells__(info, images)
+            enemies = self.__load_enemies__(info)
             hero = self.__load_hero__(info, images)
-        return GameModel(cells_dict=cells_dict, hero=hero, enemies=None, image_dict=images)
+        return GameModel(cells_dict=cells_dict, hero=hero, enemies=enemies, image_dict=images)
