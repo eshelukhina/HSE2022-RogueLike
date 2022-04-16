@@ -9,12 +9,12 @@ class InventoryView:
     """
 
     def __init__(self, window_size: Tuple[int, int]):
+        self.option_button = {}
         self.buttons = {"Equipped gear": ["Discard", "Put Off", "Cancel"],
                         "Unequipped gear": ["Discard", "Put On", "Cancel"],
                         "Potion": ["Discard", "Use", "Cancel"]}
 
         self.current_item = 0
-        self.current_button = self.buttons[0]
         self.show_item_buttons = False
 
         self.window_size = window_size
@@ -24,23 +24,23 @@ class InventoryView:
         self.color_dark = (100, 100, 100)
         self.color_black = (0, 0, 0)
         self.color_red = (170, 0, 0)
+        self.color_options = (36, 30, 42)
 
         self.width = self.screen.get_width()
         self.height = self.screen.get_height()
 
-        self.smallfont = pygame.font.SysFont('Corbel', 35)
+        self.smallfont = pygame.font.SysFont('Corbel', 25)
         self.bigfont = pygame.font.SysFont('Corbel', 40)
         self.len = 4
         self.num_of_items = self.len * 3
 
-        mid_w, mid_h = 160, 260
+        mid_w, mid_h = 160, 190
 
         counter = 0
         x = 20
         y = 20
         self.items = []
-        self.stored_items = [None] * self.num_of_items
-        for item in self.items:
+        for i in range(self.num_of_items):
             if counter % self.len == 3:
                 rect = pygame.Rect(mid_w + x, mid_h + y, 50, 50)
                 y += 70
@@ -48,7 +48,7 @@ class InventoryView:
             else:
                 rect = pygame.Rect(mid_w + x, mid_h + y, 50, 50)
                 x += 100
-            self.buttons[item] = rect
+            self.items.append(rect)
             counter += 1
 
     def add_inventory(self, inventory) -> None:
@@ -63,13 +63,37 @@ class InventoryView:
 
     def display_item_handling(self) -> None:
         self.show_item_buttons = True
-        pass
+        rect = self.items[self.current_item]
+        current_item_options_rect = pygame.Rect(rect.centerx, rect.centery, 200, 100)
+        current_item_options_rect.bottomleft = rect.center
+        pygame.draw.rect(self.screen, self.color_options, current_item_options_rect)
+        is_equipped = "Unequipped gear"
+        if self.current_item == self.inventory.equipped_weapon or self.current_item == self.inventory.equipped_armor:
+            is_equipped = "Equipped gear"
+        diff = 0
+        for text in self.buttons[is_equipped]:
+            unequipped_text = self.smallfont.render(text, True, self.color)
+            x, y = current_item_options_rect.x + 10, current_item_options_rect.y + 5
+            unequipped_rect = pygame.Rect(x, y + diff, 180, 25)
+            diff += 33
+            self.option_button[text] = (unequipped_text, unequipped_rect)
+            self.display_options()
+        pygame.display.update()
+
+    def display_options(self) -> None:
+        for key, value in self.option_button.items():
+            pygame.draw.rect(self.screen, self.color_light, value[1])
+            rect = value[0].get_rect()
+            rect.center = value[1].center
+            self.screen.blit(value[0], rect)
 
     def display_windows(self) -> None:
-        current_items_rect = pygame.Rect(150, 50, 400, 150)
+        current_items_rect = pygame.Rect(150, 10, 400, 150)
         pygame.draw.rect(self.screen, self.color_black, current_items_rect)
-        all_items_rect = pygame.Rect(150, 250, 400, 250)
+        all_items_rect = pygame.Rect(150, 180, 400, 250)
         pygame.draw.rect(self.screen, self.color_black, all_items_rect)
+        description_rect = pygame.Rect(150, 450, 400, 45)
+        pygame.draw.rect(self.screen, self.color_black, description_rect)
 
     def display_items(self) -> None:
         for i in range(self.num_of_items):
@@ -81,8 +105,8 @@ class InventoryView:
                 pygame.draw.rect(self.screen, self.color_dark, self.items[i])
 
     def display_current_items(self) -> None:
-        current_item1_rect = pygame.Rect(170, 70, 355, 45)
-        current_item2_rect = pygame.Rect(170, 135, 355, 45)
+        current_item1_rect = pygame.Rect(170, 30, 355, 45)
+        current_item2_rect = pygame.Rect(170, 100, 355, 45)
         pygame.draw.rect(self.screen, self.color_dark, current_item1_rect)
         pygame.draw.rect(self.screen, self.color_dark, current_item2_rect)
 

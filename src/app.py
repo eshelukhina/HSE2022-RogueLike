@@ -1,6 +1,7 @@
 import pygame
 
 from src.config import Config
+from src.entities.inventory import Inventory
 from src.handlers.game_handler import GameHandler
 from src.handlers.inventory_handler import InventoryHandler
 from src.handlers.system_handler import SystemHandler
@@ -17,13 +18,15 @@ class App:
         pygame.init()
         self.clock = pygame.time.Clock()
 
-        self.cur_state = State.MENU
+        self.cur_state = State.INVENTORY
 
         self.level_loader = DefaultLeverLoader()
         self.game_model = self.level_loader.load('default')
 
         self.game_handler = GameHandler(Config.WINDOW_SIZE, self.game_model)
-        self.inventory_handler = InventoryHandler()
+
+        self.inventory = Inventory()
+        self.inventory_handler = InventoryHandler(self.inventory)
 
         self.system_handler = SystemHandler()
 
@@ -40,7 +43,7 @@ class App:
                 elif self.cur_state == State.GAME:
                     self.cur_state = self.game_handler.run(event)
                 elif self.cur_state == State.INVENTORY:
-                    pass
+                    self.cur_state = self.inventory_handler.run(event)
         pygame.quit()
 
 
