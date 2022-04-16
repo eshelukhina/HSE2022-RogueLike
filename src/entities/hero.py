@@ -1,19 +1,19 @@
-from src.entities.entity import Entity
+from typing import Tuple
 
 
-class Hero(Entity):
+class Hero:
     """
     Класс персонажа, которым управляет игрок
     """
-    def __init__(self, *, x: int, y: int, image):
-        super().__init__(x, y, image)
 
-    def move(self, shift_x, shift_y) -> None:
+    def __init__(self, *, cell_pos: Tuple[int, int], image_key: int):
+        self.cell_pos = cell_pos
+        self.image_key = image_key
 
+    def move(self, new_cell_pos: Tuple[int, int]) -> None:
         """
-        :param shift_x: дельта для сдвига по оси абсцисс
-        :param shift_y: дельта для сдвига по оси ординат
+        Меняет расположение героя на карте
+        :param new_cell_pos: новая позиция на карте
         :return: None
         """
-        self.rect.x += shift_x
-        self.rect.y += shift_y
+        self.cell_pos = new_cell_pos

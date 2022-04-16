@@ -9,4 +9,4 @@ def test_simple():
     game_model = GameModel(None, None, None)
     game_handler = GameHandler()
     pygame.event.Event(256)
-    assert game_handler.run([pygame.event.Event(256)], game_model) == State.exit
+    assert game_handler.run([pygame.event.Event(256)], game_model) == State.EXIT

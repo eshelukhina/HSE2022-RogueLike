@@ -1,6 +1,3 @@
-from src.entities.entity import Entity
-
-import pygame
 import enum
 
 
@@ -11,10 +8,12 @@ class CellType(enum.Enum):
     CairnOfPassage = 3
 
 
-class Cell(Entity):
+class Cell:
     """
     Элемент карты
     """
-    def __init__(self, *, x: int, y: int, cell_type: CellType, image: pygame.image):
+    images = []
+
+    def __init__(self, *, image_key: int, cell_type: CellType):
+        self.image_key = image_key
         self.cell_type = cell_type
-        super().__init__(x, y, image)

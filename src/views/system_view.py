@@ -1,12 +1,14 @@
 import pygame
 
+from typing import Tuple
+
 
 class SystemView:
     """
-    Отображение главного меню игры
+    Класс ответственный за отображение главного меню игры
     """
 
-    def __init__(self):
+    def __init__(self, window_size: Tuple[int, int]):
         self.items = ["Start", "Reset progress", "Exit"]
         self.windows = ["Menu", "Save slots", "Choose job"]
         self.save_slots = ["Save slot 1", "Save slot 2"]
@@ -18,8 +20,8 @@ class SystemView:
         self.current_slot = self.save_slots[0]
         self.current_save_slots_state = None
 
-        self.res = (720, 528)
-        self.screen = pygame.display.set_mode(self.res)
+        self.window_size = window_size
+        self.screen = pygame.display.set_mode(self.window_size)
         self.color = (255, 255, 255)
         self.color_light = (170, 170, 170)
         self.color_dark = (100, 100, 100)
