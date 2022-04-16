@@ -86,9 +86,8 @@ class InventoryView:
         pygame.draw.rect(self.screen, self.color_dark, current_item1_rect)
         pygame.draw.rect(self.screen, self.color_dark, current_item2_rect)
 
-    def update_current_elem(self, direction, elem, arr) -> str:
-        index = arr.index(elem)
-        return arr[(index + direction) % len(arr)]
+    def update_current_elem(self, direction, index, arr) -> str:
+        return (index + direction) % len(arr)
 
     def move_cursor_menu(self, key) -> None:
         if key == pygame.K_DOWN:
