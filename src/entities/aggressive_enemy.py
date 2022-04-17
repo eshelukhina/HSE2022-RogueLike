@@ -2,13 +2,14 @@ from typing import Tuple, List, Dict, Optional
 
 from src.entities.cell import Cell
 from src.entities.cell import CellType
-from src.entities.enemy import Enemy
 from src.entities.coward_enemy import __get_dist__
+from src.entities.enemy import Enemy
 from src.handlers.game_handler import __fight__
 
 
 class AggressiveEnemy(Enemy):
-    def __init__(self, health: int, max_health: int, cell_pos, image_key: int, damage: int, exp_gain: int, attack_radius: int):
+    def __init__(self, health: int, max_health: int, cell_pos, image_key: int, damage: int, exp_gain: int,
+                 attack_radius: int):
         super().__init__(health, max_health, cell_pos, image_key, damage, exp_gain)
         self.attack_radius = attack_radius
 

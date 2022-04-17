@@ -20,6 +20,7 @@ import numpy as np
 def __fight__(hero: Hero, enemy: Enemy):
     hero.health -= enemy.damage
     enemy.health -= hero.damage
+    pass
 
 
 class GameHandler:
@@ -79,25 +80,19 @@ class GameHandler:
                         hero.cell_pos = next_pos
                     else:
                         __fight__(hero, enemy)
-                        # if hero is dead
-                        if hero.health <= 0:
-                            # todo YOU ARE DEAD screen with button to return to menu
-                            return State.EXIT
-                        # remove dead enemies
-                        dead_enemies = list(filter(lambda e: e.health <= 0, enemies))
-                        # reward
-                        for dead_enemy in dead_enemies:
-                            hero.add_exp(dead_enemy.exp_gain)
-                        self.game_model.enemies = list(filter(lambda e: e not in dead_enemies, enemies))
-                elif cells[next_pos].cell_type == CellType.Chest:
-                    chest_item = self.generate_item()
-                    self.game_model.inventory.add_item(chest_item)
-                    cells[next_pos].cell_type = CellType.Empty
-                    print(self.game_model.inventory.items)
                 for enemy in enemies:
-                    enemy.move(hero, enemies, cells)
-            if event.key == pygame.K_i:
-                state.state_machine = State.INVENTORY
+                    if enemy.health > 0:
+                        enemy.move(hero, enemies, cells)
+                # if hero is dead
+                if hero.health <= 0:
+                    # todo YOU ARE DEAD screen with button to return to menu
+                    state.state_machine = State.EXIT
+                # remove dead enemies
+                dead_enemies = list(filter(lambda e: e.health <= 0, enemies))
+                # reward
+                for dead_enemy in dead_enemies:
+                    hero.add_exp(dead_enemy.exp_gain)
+                self.game_model.enemies = list(filter(lambda e: e not in dead_enemies, enemies))
         self.print_game()
         return State.GAME
 
