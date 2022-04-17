@@ -7,19 +7,20 @@ def __get_dist__(cell_pos: Tuple[int, int], other_cell_pos):
     return abs(cell_pos[0] - other_cell_pos[0]) + abs(cell_pos[1] - other_cell_pos[1])
 
 
+def __try_move__(next_pos, hero, enemies, cells) -> bool:
+    if next_pos not in cells or cells[next_pos].cell_type == CellType.Wall:
+        return False
+    if len(list(filter(lambda e: e.cell_pos[0] == next_pos[0] and
+                                 e.cell_pos[1] == next_pos[1], enemies))) > 0:
+        return False
+    if hero.cell_pos[0] == next_pos[0] and hero.cell_pos[1] == next_pos[1]:
+        return False
+    return True
+
 class CowardEnemy(Enemy):
     def __init__(self, health, max_health: int, cell_pos, image_key: int, damage: int, exp_gain: int, scare_radius: int):
         super().__init__(health, max_health, cell_pos, image_key, damage, exp_gain)
         self.scare_radius = scare_radius
-
-    def __try_move__(self, next_pos, enemies, cells) -> bool:
-        if next_pos not in cells or cells[next_pos].cell_type == CellType.Wall:
-            return False
-        if len(list(filter(lambda e: e.cell_pos[0] == next_pos[0] and
-                                     e.cell_pos[1] == next_pos[1], enemies))) > 0:
-            return False
-        self.cell_pos = next_pos
-        return True
 
     def move(self, hero, enemies, cells):
         cur_dist = __get_dist__(self.cell_pos, hero.cell_pos)
@@ -45,5 +46,6 @@ class CowardEnemy(Enemy):
         )
         for pot_pos_with_dist in potential_position_with_dist:
             pot_pos = pot_pos_with_dist[0], pot_pos_with_dist[1]
-            if self.__try_move__(pot_pos, enemies, cells):
+            if __try_move__(pot_pos, hero, enemies, cells):
+                self.cell_pos = pot_pos
                 return

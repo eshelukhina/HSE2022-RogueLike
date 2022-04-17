@@ -1,18 +1,16 @@
 from typing import List, Tuple, Optional
 
 import pygame
-
 from src.entities.armor import Armor
-from src.entities.cell import CellType
-from src.entities.hero import Hero
-from src.entities.enemy import Enemy
-from src.entities.inventory import Inventory
-from src.entities.weapon import Weapon
-from src.model.game_model import GameModel
-from src.views.game_view import GameView
-
 from src import state
+from src.entities.cell import CellType
+from src.entities.confused_enemy import ConfusedEnemy
+from src.entities.enemy import Enemy
+from src.entities.weapon import Weapon
+from src.entities.hero import Hero
+from src.model.game_model import GameModel
 from src.state import State
+from src.views.game_view import GameView
 
 import numpy as np
 
@@ -53,6 +51,11 @@ class GameHandler:
                 res_enemy = enemy
         return res_enemy
 
+    def __set_confused_enemy__(self, enemies: List[Enemy], enemy: Enemy, confused_enemy):
+        for i in range(len(enemies)):
+            if enemies[i] is enemy:
+                enemies[i] = confused_enemy
+                return
 
     def print_game(self):
         self.game_view.view_load(self.game_model)
@@ -80,6 +83,8 @@ class GameHandler:
                         hero.cell_pos = next_pos
                     else:
                         __fight__(hero, enemy)
+                        if hero.damage > 10:
+                            self.__set_confused_enemy__(enemies, enemy, ConfusedEnemy(enemy))
                 for enemy in enemies:
                     if enemy.health > 0:
                         enemy.move(hero, enemies, cells)
@@ -93,6 +98,11 @@ class GameHandler:
                 for dead_enemy in dead_enemies:
                     hero.add_exp(dead_enemy.exp_gain)
                 self.game_model.enemies = list(filter(lambda e: e not in dead_enemies, enemies))
+                enemies = self.game_model.enemies
+                for i in range(len(enemies)):
+                    enemy = enemies[i]
+                    if isinstance(enemy, ConfusedEnemy) and enemy.time == 0:
+                        enemies[i] = enemy.get_enemy()
         self.print_game()
         return State.GAME
 
