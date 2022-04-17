@@ -19,7 +19,7 @@ def __load_base_enemy_info__(enemy_info):
 def __load_passive_enemy__(enemy_info):
     health, cell_pos, image_key, damage, exp_gain = __load_base_enemy_info__(enemy_info)
     return PassiveEnemy(
-        health=health, cell_pos=cell_pos,
+        health=health, max_health=health, cell_pos=cell_pos,
         image_key=image_key, damage=damage, exp_gain=exp_gain)
 
 
@@ -27,7 +27,7 @@ def __load_coward_enemy__(enemy_info):
     health, cell_pos, image_key, damage, exp_gain = __load_base_enemy_info__(enemy_info)
     scare_radius = enemy_info['scare_radius']
     return CowardEnemy(
-        health=health, cell_pos=cell_pos, scare_radius=scare_radius,
+        health=health, max_health=health, cell_pos=cell_pos, scare_radius=scare_radius,
         image_key=image_key, damage=damage, exp_gain=exp_gain)
 
 
@@ -35,7 +35,7 @@ def __load_aggressive_enemy__(enemy_info):
     health, cell_pos, image_key, damage, exp_gain = __load_base_enemy_info__(enemy_info)
     attack_radius = enemy_info['attack_radius']
     return AggressiveEnemy(
-        health=health, cell_pos=cell_pos, attack_radius=attack_radius,
+        health=health, max_health=health, cell_pos=cell_pos, attack_radius=attack_radius,
         image_key=image_key, damage=damage, exp_gain=exp_gain)
 
 

@@ -1,3 +1,4 @@
+import numpy as np
 import os
 import pygame
 
@@ -6,6 +7,20 @@ from typing import Tuple, Dict
 from src.config import Config
 from src.model.game_model import GameModel
 
+
+def reddening(surf, alpha):
+    assert 0 <= alpha <= 255
+    redshade = pygame.Surface(surf.get_rect().size).convert_alpha()
+    redshade.fill((255, 0, 0, alpha))
+    alpha_basemask = pygame.surfarray.array_alpha(surf)
+    alpha_redmask = pygame.surfarray.pixels_alpha(redshade)
+    np.minimum(alpha_basemask, alpha_redmask, out=alpha_redmask)
+
+    del alpha_redmask
+
+    redsurf = surf.copy()
+    redsurf.blit(redshade, (0, 0))
+    return redsurf
 
 class GameView:
     """
@@ -87,7 +102,10 @@ class GameView:
         for enemy in game_model.enemies:
             screen_pos = self.__get_cell_screen_pos__(enemy.cell_pos, self.cell_size)
             rect = pygame.rect.Rect(screen_pos, self.cell_size)
-            image = self.images[enemy.image_key]
+            image = self.images[enemy.image_key].convert_alpha()
+            if enemy.health < enemy.max_health:
+                alpha = 100 * (1 - (enemy.health / float(enemy.max_health))) + 10
+                image = reddening(image, alpha)
             self.screen.blit(image, rect)
         # draw health
         health = hero.health

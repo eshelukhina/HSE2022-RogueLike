@@ -17,6 +17,11 @@ from src.state import State
 import numpy as np
 
 
+def __fight__(hero: Hero, enemy: Enemy):
+    hero.health -= enemy.damage
+    enemy.health -= hero.damage
+
+
 class GameHandler:
     """
     Класс ответственный за обработку game event'ов
@@ -47,10 +52,6 @@ class GameHandler:
                 res_enemy = enemy
         return res_enemy
 
-    def __fight__(self, hero: Hero, enemy: Enemy):
-        hero.health -= enemy.damage - hero.damage_taken_modifier
-        enemy.health -= hero.damage
-        pass
 
     def print_game(self):
         self.game_view.view_load(self.game_model)
@@ -77,7 +78,7 @@ class GameHandler:
                     if enemy is None:
                         hero.cell_pos = next_pos
                     else:
-                        self.__fight__(hero, enemy)
+                        __fight__(hero, enemy)
                         # if hero is dead
                         if hero.health <= 0:
                             # todo YOU ARE DEAD screen with button to return to menu

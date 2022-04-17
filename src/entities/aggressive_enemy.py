@@ -6,9 +6,10 @@ from src.entities.enemy import Enemy
 from src.entities.coward_enemy import __get_dist__
 from src.handlers.game_handler import __fight__
 
+
 class AggressiveEnemy(Enemy):
-    def __init__(self, health: int, cell_pos, image_key: int, damage: int, exp_gain: int, attack_radius: int):
-        super().__init__(health, cell_pos, image_key, damage, exp_gain)
+    def __init__(self, health: int, max_health: int, cell_pos, image_key: int, damage: int, exp_gain: int, attack_radius: int):
+        super().__init__(health, max_health, cell_pos, image_key, damage, exp_gain)
         self.attack_radius = attack_radius
 
     def __get_next_pos__(self,
@@ -53,4 +54,4 @@ class AggressiveEnemy(Enemy):
             if next_pos[0] == hero.cell_pos[0] and next_pos[1] == hero.cell_pos[1]:
                 __fight__(hero, self)
             else:
-                self.cell_pos = next_pos[0]
+                self.cell_pos = next_pos
