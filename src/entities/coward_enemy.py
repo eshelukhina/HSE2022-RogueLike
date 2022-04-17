@@ -1,5 +1,10 @@
+from typing import Tuple
 from src.entities.cell import CellType
 from src.entities.enemy import Enemy
+
+
+def __get_dist__(cell_pos: Tuple[int, int], other_cell_pos):
+    return abs(cell_pos[0] - other_cell_pos[0]) + abs(cell_pos[1] - other_cell_pos[1])
 
 
 class CowardEnemy(Enemy):
@@ -17,17 +22,28 @@ class CowardEnemy(Enemy):
         return True
 
     def move(self, hero, enemies, cells):
-        diff_x = hero.cell_pos[0] - self.cell_pos[0]
-        diff_y = hero.cell_pos[1] - self.cell_pos[1]
-        dist = abs(diff_x) + abs(diff_y)
-        if dist > self.scare_radius:
+        cur_dist = __get_dist__(self.cell_pos, hero.cell_pos)
+        if cur_dist <= 1:
             return
-        # todo sort priorities and try to run in that order
-        run_x = 1 if diff_x < 0 else -1
-        run_y = 1 if diff_y < 0 else -1
-        if abs(diff_x) <= abs(diff_y):
-            move_to = (self.cell_pos[0] + run_x, self.cell_pos[1])
-            if self.__try_move__(move_to, enemies, cells):
+        cur_x, cur_y = self.cell_pos
+        potential_positions = [
+            (cur_x + 1, cur_y), (cur_x - 1, cur_y),
+            (cur_x, cur_y + 1), (cur_x, cur_y - 1)
+        ]
+        potential_position_with_dist = []
+        for pot_pos in potential_positions:
+            pot_x, pot_y = pot_pos
+            dist = __get_dist__(pot_pos, hero.cell_pos)
+            potential_position_with_dist.append((pot_x, pot_y, dist))
+
+        potential_position_with_dist = filter(
+            lambda e: self.scare_radius >= e[2] > cur_dist,
+            potential_position_with_dist
+        )
+        potential_position_with_dist = sorted(
+            potential_position_with_dist, key=lambda e: -e[2]
+        )
+        for pot_pos_with_dist in potential_position_with_dist:
+            pot_pos = pot_pos_with_dist[0], pot_pos_with_dist[1]
+            if self.__try_move__(pot_pos, enemies, cells):
                 return
-        move_to = (self.cell_pos[0], self.cell_pos[1] + run_y)
-        self.__try_move__(move_to, enemies, cells)
