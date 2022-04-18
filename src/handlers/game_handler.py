@@ -85,5 +85,7 @@ class GameHandler:
                         self.game_model.enemies = list(filter(lambda e: e not in dead_enemies, enemies))
                 for enemy in enemies:
                     enemy.move(hero, enemies, cells)
+            if event.key == pygame.K_i:
+                state.state_machine = State.INVENTORY
         self.print_game()
         return State.GAME

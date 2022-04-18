@@ -16,6 +16,7 @@ class InventoryView:
 
         self.current_item = 0
         self.show_item_buttons = False
+        self.current_option_button = 0
 
         self.window_size = window_size
         self.screen = pygame.display.set_mode(self.window_size)
@@ -52,9 +53,11 @@ class InventoryView:
             counter += 1
 
     def add_inventory(self, inventory) -> None:
+        """Добавить инвентарь, который впоследствии будет отображаться"""
         self.inventory = inventory
 
     def display_inventory(self) -> None:
+        """"Отобразить текущее состояние иннвентаря"""
         self.screen.fill((60, 25, 60))
         self.display_windows()
         self.display_items()
@@ -62,6 +65,8 @@ class InventoryView:
         pygame.display.update()
 
     def display_item_handling(self) -> None:
+        """Отобразить возможные действия с предметами"""
+        self.option_button = {}
         self.show_item_buttons = True
         rect = self.items[self.current_item]
         current_item_options_rect = pygame.Rect(rect.centerx, rect.centery, 200, 100)
@@ -77,17 +82,22 @@ class InventoryView:
             unequipped_rect = pygame.Rect(x, y + diff, 180, 25)
             diff += 33
             self.option_button[text] = (unequipped_text, unequipped_rect)
-            self.display_options()
-        pygame.display.update()
+        self.current_option_button = 0
+        self.display_options()
 
     def display_options(self) -> None:
-        for key, value in self.option_button.items():
-            pygame.draw.rect(self.screen, self.color_light, value[1])
+        for i, (key, value) in enumerate(self.option_button.items()):
+            if i == self.current_option_button:
+                pygame.draw.rect(self.screen, self.color_light, value[1])
+            else:
+                pygame.draw.rect(self.screen, self.color_dark, value[1])
             rect = value[0].get_rect()
             rect.center = value[1].center
             self.screen.blit(value[0], rect)
+        pygame.display.update()
 
     def display_windows(self) -> None:
+        """Отображение рамки по краям инвентаря"""
         current_items_rect = pygame.Rect(150, 10, 400, 150)
         pygame.draw.rect(self.screen, self.color_black, current_items_rect)
         all_items_rect = pygame.Rect(150, 180, 400, 250)
@@ -96,6 +106,7 @@ class InventoryView:
         pygame.draw.rect(self.screen, self.color_black, description_rect)
 
     def display_items(self) -> None:
+        """Отобразить предметы инвентаря"""
         for i in range(self.num_of_items):
             if i == self.current_item:
                 pygame.draw.rect(self.screen, self.color_light, self.items[i])
@@ -105,15 +116,32 @@ class InventoryView:
                 pygame.draw.rect(self.screen, self.color_dark, self.items[i])
 
     def display_current_items(self) -> None:
+        """Отобразить надетые предметы"""
+        desc_item1, desc_item2 = f"Arm +{0}", f"Armor +{0}"
         current_item1_rect = pygame.Rect(170, 30, 355, 45)
+        if self.inventory.equipped_weapon == -1:
+            desc_item1.format(0)
+        else:
+            desc_item1.format(self.inventory[self.inventory.equipped_weapon].strength)
+
+        if self.inventory.equipped_armor == -1:
+            desc_item2.format(0)
+        else:
+            desc_item2.format(self.inventory[self.inventory.equipped_armor].defence)
         current_item2_rect = pygame.Rect(170, 100, 355, 45)
         pygame.draw.rect(self.screen, self.color_dark, current_item1_rect)
         pygame.draw.rect(self.screen, self.color_dark, current_item2_rect)
+        desc_item1_render = self.smallfont.render(desc_item1, True, self.color)
+        desc_item2_render = self.smallfont.render(desc_item2, True, self.color)
+        self.screen.blit(desc_item1_render, current_item1_rect.center)
+        self.screen.blit(desc_item2_render, current_item2_rect.center)
 
     def update_current_elem(self, direction, index, arr) -> str:
+        """"""
         return (index + direction) % len(arr)
 
     def move_cursor_menu(self, key) -> None:
+        """Передвижение по предметам инвентаря"""
         if key == pygame.K_DOWN:
             self.current_item = self.update_current_elem(self.len, self.current_item, self.items)
         elif key == pygame.K_UP:
@@ -125,7 +153,13 @@ class InventoryView:
         self.display_inventory()
 
     def move_cursor_item_handling(self, key) -> None:
-        pass
+        if key == pygame.K_DOWN:
+            self.current_option_button = self.update_current_elem(1, self.current_option_button,
+                                                                  list(self.option_button.keys()))
+        elif key == pygame.K_UP:
+            self.current_option_button = self.update_current_elem(-1, self.current_option_button,
+                                                                  list(self.option_button.keys()))
+        self.display_options()
 
     def move_cursor(self, key) -> None:
         if self.show_item_buttons:
@@ -134,4 +168,10 @@ class InventoryView:
             self.move_cursor_menu(key)
 
     def press_button(self):
-        pass
+        if self.current_option_button == 0:
+            self.inventory.discard_item(self.current_item)
+        elif self.current_option_button == 1:
+            self.inventory.equip_item(self.current_item)
+        else:
+            self.show_item_buttons = False
+        self.display_inventory()

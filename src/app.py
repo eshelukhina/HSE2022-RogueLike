@@ -30,8 +30,7 @@ class App:
                                image_dict=self.game_model.image_dict),
             game_model=self.game_model)
         self.inventory = Inventory()
-        self.inventory_handler = InventoryHandler(self.inventory)
-
+        self.inventory_handler = InventoryHandler()
         self.system_handler = SystemHandler()
 
     def run(self):
@@ -47,10 +46,11 @@ class App:
                     # todo not pretty but this what is needed to be done
                     if self.cur_state == State.GAME:
                         self.game_handler.print_game()
+                        self.inventory_handler.set_inventory(self.system_handler.inventory)
                 elif self.cur_state == State.GAME:
                     self.cur_state = self.game_handler.run(event)
                 elif self.cur_state == State.INVENTORY:
-                    pass
+                    self.cur_state = self.inventory_handler.run(event)
         pygame.quit()
 
 

@@ -1,5 +1,6 @@
 import pygame
 
+from src import state
 from src.config import Config
 from src.entities.inventory import Inventory
 from src.state import State
@@ -11,21 +12,33 @@ class InventoryHandler:
     Класс ответственен за обработку взаимодействия с инвентарем
     """
 
-    def __init__(self,inventory: Inventory):
-        self.inventory = inventory
+    def __init__(self):
+        self.inventory = None
         self.inventory_view = InventoryView(Config.WINDOW_SIZE)
-        self.inventory_view.add_inventory(inventory)
-        self.inventory_view.display_inventory()
         self.current_state = State.INVENTORY
+        self.init_inventory = False
+
+    def print_game(self):
+        if not self.init_inventory:
+            self.inventory_view.display_inventory()
+        self.init_inventory = True
+
+    def close_inventory(self):
+        self.init_inventory = False
+
+    def set_inventory(self, inventory):
+        self.inventory = inventory
+        self.inventory_view.add_inventory(inventory)
 
     def run(self, event) -> State:
         """
         Определение и вызов обработки Event'ов
         :return: State
         """
+        self.print_game()
         if event.type == pygame.QUIT:
             # no more for this iteration
-            self.current_state = State.EXIT
+            state.state_machine = State.EXIT
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_DOWN or event.key == pygame.K_UP \
                     or event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
