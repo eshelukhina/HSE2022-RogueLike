@@ -23,5 +23,8 @@ class Inventory:
             self.equipped_armor = -1
         self.items[i] = None
 
-    def equip_weapon(self, i):
-        self.equipped_weapon = i
+    def equip_item(self, i):
+        if self.items[i] == Weapon:
+            self.equipped_weapon = i
+        elif self.items[i] == Armor:
+            self.equipped_armor = i
