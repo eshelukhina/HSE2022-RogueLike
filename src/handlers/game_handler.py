@@ -115,8 +115,9 @@ class GameHandler:
 
     def generate_weapon(self):
         return Weapon(image="weapon1.jpg",
-                      strength=np.random.randint(low=1, high=self.game_model.hero.level + 2, size=1), name="")
+                      strength=np.random.randint(low=1, high=self.game_model.hero.level + 2, size=1)[0], name="")
 
     def generate_armor(self):
-        return Armor(image="armor1.jpg", defence=np.random.randint(low=1, high=self.game_model.hero.level + 2, size=1),
+        return Armor(image="armor1.jpg",
+                     defence=np.random.randint(low=1, high=self.game_model.hero.level + 2, size=1)[0],
                      name="")
