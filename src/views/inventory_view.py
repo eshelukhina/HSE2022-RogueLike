@@ -61,7 +61,6 @@ class InventoryView:
     def display_inventory(self) -> None:
         """"Отобразить текущее состояние иннвентаря"""
         self.screen.fill((60, 25, 60))
-        print(self.inventory.items)
         self.display_windows()
         self.display_items()
         self.display_current_items()
@@ -124,17 +123,16 @@ class InventoryView:
 
     def display_current_items(self) -> None:
         """Отобразить надетые предметы"""
-        desc_item1, desc_item2 = f"Arm +{0}", f"Armor +{0}"
+        desc_item1, desc_item2 = "Arm +{0}", "Armor +{0}"
         current_item1_rect = pygame.Rect(170, 30, 355, 45)
         if self.inventory.equipped_weapon == -1:
-            desc_item1.format(0)
+            desc_item1 = desc_item1.format(0)
         else:
-            desc_item1.format(self.inventory.items[self.inventory.equipped_weapon].strength)
-            print('here')
+            desc_item1 = desc_item1.format(self.inventory.items[self.inventory.equipped_weapon].strength)
         if self.inventory.equipped_armor == -1:
-            desc_item2.format(0)
+            desc_item2 = desc_item2.format(0)
         else:
-            desc_item2.format(self.inventory[self.inventory.equipped_armor].defence)
+            desc_item2 = desc_item2.format(self.inventory.items[self.inventory.equipped_armor].defence)
         current_item2_rect = pygame.Rect(170, 100, 355, 45)
         pygame.draw.rect(self.screen, self.color_dark, current_item1_rect)
         pygame.draw.rect(self.screen, self.color_dark, current_item2_rect)
@@ -173,6 +171,3 @@ class InventoryView:
             self.move_cursor_item_handling(key)
         else:
             self.move_cursor_menu(key)
-
-
-

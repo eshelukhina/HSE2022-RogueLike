@@ -24,7 +24,7 @@ class Inventory:
         self.items[i] = None
 
     def equip_item(self, i):
-        if self.items[i] == Weapon:
+        if isinstance(self.items[i], Weapon):
             self.equipped_weapon = i
-        elif self.items[i] == Armor:
+        elif isinstance(self.items[i], Armor):
             self.equipped_armor = i
