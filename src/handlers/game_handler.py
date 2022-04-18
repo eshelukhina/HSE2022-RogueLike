@@ -2,14 +2,19 @@ from typing import List, Tuple, Optional
 
 import pygame
 
+from src.entities.armor import Armor
 from src.entities.cell import CellType
 from src.entities.hero import Hero
 from src.entities.enemy import Enemy
+from src.entities.inventory import Inventory
+from src.entities.weapon import Weapon
 from src.model.game_model import GameModel
 from src.views.game_view import GameView
 
 from src import state
 from src.state import State
+
+import numpy as np
 
 
 class GameHandler:
@@ -43,7 +48,7 @@ class GameHandler:
         return res_enemy
 
     def __fight__(self, hero: Hero, enemy: Enemy):
-        hero.health -= enemy.damage
+        hero.health -= enemy.damage - hero.damage_taken_modifier
         enemy.health -= hero.damage
         pass
 
@@ -83,9 +88,29 @@ class GameHandler:
                         for dead_enemy in dead_enemies:
                             hero.add_exp(dead_enemy.exp_gain)
                         self.game_model.enemies = list(filter(lambda e: e not in dead_enemies, enemies))
+                elif cells[next_pos].cell_type == CellType.Chest:
+                    chest_item = self.generate_item()
+                    self.game_model.inventory.add_item(chest_item)
+                    cells[next_pos].cell_type = CellType.Empty
+                    print(self.game_model.inventory.items)
                 for enemy in enemies:
                     enemy.move(hero, enemies, cells)
             if event.key == pygame.K_i:
                 state.state_machine = State.INVENTORY
         self.print_game()
         return State.GAME
+
+    def generate_item(self):
+        n, p = 1, 0.5
+        res = np.random.binomial(n, p)
+        if res == 0:
+            return self.generate_weapon()
+        return self.generate_armor()
+
+    def generate_weapon(self):
+        return Weapon(image="weapon1.jpg",
+                      strength=np.random.randint(low=1, high=self.game_model.hero.level + 2, size=1), name="")
+
+    def generate_armor(self):
+        return Armor(image="armor1.jpg", defence=np.random.randint(low=1, high=self.game_model.hero.level + 2, size=1),
+                     name="")

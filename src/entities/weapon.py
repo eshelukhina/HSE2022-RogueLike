@@ -1,5 +1,5 @@
 class Weapon:
-    def __init__(self):
-        self.name = ""
-        self.strength = 0
-        self.image = ""
+    def __init__(self, name, strength, image):
+        self.name = name
+        self.strength = strength
+        self.image = image

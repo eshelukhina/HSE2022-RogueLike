@@ -4,6 +4,7 @@ from typing import Dict
 from src.entities.cell import Cell, CellType
 from src.entities.hero import Hero
 from src.entities.enemy import Enemy
+from src.entities.inventory import Inventory
 from src.entities.passive_enemy import PassiveEnemy
 from src.entities.coward_enemy import CowardEnemy
 from src.model.game_model import GameModel
@@ -40,7 +41,8 @@ class DefaultLeverLoader:
 
     CELL_TYPES_DICT = {
         '0': CellType.Empty,
-        '1': CellType.Wall
+        '1': CellType.Wall,
+        '2': CellType.Chest
     }
     STRATEGY_TO_ENEMY = {
         'passive': __load_passive_enemy__,
@@ -116,4 +118,4 @@ class DefaultLeverLoader:
             cells_dict = self.__load_cells__(info, images)
             enemies = self.__load_enemies__(info)
             hero = self.__load_hero__(info, images)
-        return GameModel(cells_dict=cells_dict, hero=hero, enemies=enemies, image_dict=images)
+        return GameModel(cells_dict=cells_dict, hero=hero, enemies=enemies, image_dict=images, inventory=Inventory())

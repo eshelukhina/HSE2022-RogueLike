@@ -2,6 +2,8 @@ from typing import Tuple
 
 import pygame
 
+from src.config import Config
+
 
 class InventoryView:
     """
@@ -59,6 +61,7 @@ class InventoryView:
     def display_inventory(self) -> None:
         """"Отобразить текущее состояние иннвентаря"""
         self.screen.fill((60, 25, 60))
+        print(self.inventory.items)
         self.display_windows()
         self.display_items()
         self.display_current_items()
@@ -114,6 +117,10 @@ class InventoryView:
                 pygame.draw.rect(self.screen, self.color_red, self.items[i])
             else:
                 pygame.draw.rect(self.screen, self.color_dark, self.items[i])
+            if self.inventory.items[i] is not None:
+                item_image = pygame.image.load(Config.PATH_TO_TEXTURES + "/" + self.inventory.items[i].image)
+                self.screen.blit(item_image, (self.items[i].x, self.items[i].y))
+                pygame.display.flip()
 
     def display_current_items(self) -> None:
         """Отобразить надетые предметы"""
@@ -122,8 +129,8 @@ class InventoryView:
         if self.inventory.equipped_weapon == -1:
             desc_item1.format(0)
         else:
-            desc_item1.format(self.inventory[self.inventory.equipped_weapon].strength)
-
+            desc_item1.format(self.inventory.items[self.inventory.equipped_weapon].strength)
+            print('here')
         if self.inventory.equipped_armor == -1:
             desc_item2.format(0)
         else:
@@ -167,11 +174,5 @@ class InventoryView:
         else:
             self.move_cursor_menu(key)
 
-    def press_button(self):
-        if self.current_option_button == 0:
-            self.inventory.discard_item(self.current_item)
-        elif self.current_option_button == 1:
-            self.inventory.equip_item(self.current_item)
-        else:
-            self.show_item_buttons = False
-        self.display_inventory()
+
+

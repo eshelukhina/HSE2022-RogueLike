@@ -53,13 +53,8 @@ class SystemHandler:
                         self.system_view.press_reset_(self.save_slots)
                 elif self.system_view.current_window == "Save slots":
                     if self.system_view.current_save_slots_state == "Start":
-                        self.create_save_slot()
                         self.close_menu()
                         self.current_state = State.GAME
                     elif self.system_view.current_save_slots_state == "Reset":
                         self.system_view.press_choose_reset_save_slot()
         return self.current_state
-
-    def create_save_slot(self):
-        self.inventory = Inventory()
-

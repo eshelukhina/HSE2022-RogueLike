@@ -1,5 +1,5 @@
 class Armor:
-    def __init__(self):
-        self.name = ""
-        self.defence = 0
-        self.image = ""
+    def __init__(self, name, defence, image):
+        self.name = name
+        self.defence = defence
+        self.image = image
