@@ -6,6 +6,7 @@ from src.handlers.inventory_handler import InventoryHandler
 from src.handlers.system_handler import SystemHandler
 from src.loader.default_level_loader import DefaultLeverLoader
 from src.state import State
+from src.views.game_view import GameView
 
 
 class App:
@@ -22,7 +23,11 @@ class App:
         level_loader = DefaultLeverLoader(path_to_levels='levels', path_to_textures='textures')
         self.game_model = level_loader.load('default.json')
 
-        self.game_handler = GameHandler(Config.WINDOW_SIZE, self.game_model)
+        self.game_handler = GameHandler(
+            game_view=GameView(window_size=Config.WINDOW_SIZE,
+                               cell_size=(48, 48),
+                               image_dict=self.game_model.image_dict),
+            game_model=self.game_model)
         self.inventory_handler = InventoryHandler()
 
         self.system_handler = SystemHandler()

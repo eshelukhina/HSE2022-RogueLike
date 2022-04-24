@@ -19,8 +19,8 @@ class GameHandler:
         pygame.K_DOWN: (0, 1)
     }
 
-    def __init__(self, windows_size: Tuple[int, int], game_model: GameModel):
-        self.game_view = GameView(windows_size, (48, 48), game_model.image_dict)
+    def __init__(self, game_model: GameModel, game_view: GameView):
+        self.game_view = game_view
         self.game_model = game_model
 
     def __move_hero__(self, key_event: int, game_model: GameModel) -> None:

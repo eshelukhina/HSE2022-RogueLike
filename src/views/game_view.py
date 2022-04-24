@@ -11,7 +11,7 @@ class GameView:
     """
     BACKGROUND_COLOR = (0, 0, 0)
 
-    def __init__(self, window_size: Tuple[int, int], cell_size: Tuple[int, int], image_dict: Dict[str, str]):
+    def __init__(self, *, window_size: Tuple[int, int], cell_size: Tuple[int, int], image_dict: Dict[str, str]):
         self.screen = pygame.display.set_mode(window_size)
         self.cell_size = cell_size
         self.images = {}
