@@ -19,8 +19,8 @@ class App:
 
         self.cur_state = State.MENU
 
-        self.level_loader = DefaultLeverLoader()
-        self.game_model = self.level_loader.load('default')
+        level_loader = DefaultLeverLoader(path_to_levels='levels', path_to_textures='textures')
+        self.game_model = level_loader.load('default.json')
 
         self.game_handler = GameHandler(Config.WINDOW_SIZE, self.game_model)
         self.inventory_handler = InventoryHandler()

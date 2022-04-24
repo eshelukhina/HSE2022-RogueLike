@@ -2,12 +2,9 @@ import json
 import os
 from typing import Dict
 
-import pygame.image
-
 from src.entities.cell import Cell, CellType
 from src.entities.hero import Hero
 from src.model.game_model import GameModel
-from src.views.game_view import GameView
 
 
 class DefaultLeverLoader:
@@ -15,14 +12,17 @@ class DefaultLeverLoader:
         Класс DefaultLeverLoader ответственен за загрузку уровеней.
         Извлекает необходмую информацию из json файлов согласно внутреннему инварианту.
     """
-    PATH_TO_LEVELS = "levels"
-    PATH_TO_TEXTURES = "textures"
+
+    def __init__(self, *, path_to_levels: str, path_to_textures: str):
+        self.path_to_levels = path_to_levels
+        self.path_to_textures = path_to_textures
+
     CELL_TYPES_DICT = {
         '0': CellType.Empty,
         '1': CellType.Wall
     }
 
-    def __load_cells__(self, info):
+    def __load_cells__(self, info, images):
         num_cells_width = info['cells_amount'][0]
         num_cells_height = info['cells_amount'][1]
         cell_types = info['map']['cell_types']
@@ -31,42 +31,53 @@ class DefaultLeverLoader:
         for i in range(num_cells_height):
             for j in range(num_cells_width):
                 curr = i * num_cells_width + j
+                if curr >= len(cell_types) or curr >= len(cell_images):
+                    raise ValueError(
+                        f'{curr} index out of range. Check cells_amount and cells_images/cell_types are consistent.'
+                    )
                 image_key = cell_images[curr]
+                if image_key not in images:
+                    raise ValueError(f'Image with key {image_key} is unknown')
                 type_id = cell_types[curr]
+                if type_id not in self.CELL_TYPES_DICT:
+                    raise ValueError(f'Type id {type_id} is unknown')
                 cell_type = self.CELL_TYPES_DICT[type_id]
                 cells[(j, i)] = Cell(cell_type=cell_type, image_key=image_key)
         return cells
 
-    def __load_hero__(self, info) -> Hero:
+    def __load_hero__(self, info, images) -> Hero:
+        num_cells_width = info['cells_amount'][0]
+        num_cells_height = info['cells_amount'][1]
         hero_info = info['hero']
-        hero_cell_pos = hero_info['position'][0], hero_info['position'][1]
+        hero_cell_x, hero_cell_y = hero_info['position'][0], hero_info['position'][1]
+        if hero_cell_x >= num_cells_width or hero_cell_y >= num_cells_height:
+            raise ValueError(f'Wrong starting hero position: {hero_cell_x}x{hero_cell_y} out of range')
         image_key = hero_info['image_key']
-        return Hero(cell_pos=hero_cell_pos, image_key=image_key)
+        if image_key not in images:
+            raise ValueError(f'Image with key {image_key} is unknown')
+        return Hero(cell_pos=(hero_cell_x, hero_cell_y), image_key=image_key)
 
     def __load_enemies__(self):
         raise NotImplemented()
 
-    def __load_images__(self, info) -> Dict[str, pygame.Surface]:
+    def __load_images__(self, info) -> Dict[str, str]:
         images_info = info['images']
         images = {}
         for image_key in images_info:
-            path_to_image = os.path.join(self.PATH_TO_TEXTURES, images_info[image_key])
-            image = pygame.image.load(path_to_image)
-            images[image_key] = image
+            path_to_image = os.path.join(self.path_to_textures, images_info[image_key])
+            images[image_key] = path_to_image
         return images
 
-    def load(self, level_name: str) -> GameModel:
+    def load(self, file_name: str) -> GameModel:
         """
-        Конструирует и возвращает модель уровня, загружает все необходимые
-        картинки в GameView.
-        :param level_name: название уровня
+        Конструирует и возвращает модель уровня, а также все загруженные картинки.
+        :param file_name: имя файла уровня
         :return: модель уровня, содержащую все считаные из файла обьекты
         """
-        level_file = os.path.join(self.PATH_TO_LEVELS, level_name + '.json')
+        level_file = os.path.join(self.path_to_levels, file_name)
         with open(level_file, 'r') as level:
             info = json.load(level)
-            cells = self.__load_cells__(info)
-            hero = self.__load_hero__(info)
-            # load images into view
-            GameView.images = self.__load_images__(info)
-        return GameModel(cells, hero, None)
+            images = self.__load_images__(info)
+            cells_dict = self.__load_cells__(info, images)
+            hero = self.__load_hero__(info, images)
+        return GameModel(cells_dict=cells_dict, hero=hero, enemies=None, image_dict=images)

@@ -20,15 +20,15 @@ class GameHandler:
     }
 
     def __init__(self, windows_size: Tuple[int, int], game_model: GameModel):
-        self.game_view = GameView(windows_size, (48, 48))
+        self.game_view = GameView(windows_size, (48, 48), game_model.image_dict)
         self.game_model = game_model
 
     def __move_hero__(self, key_event: int, game_model: GameModel) -> None:
         hero = game_model.hero
-        cells = game_model.cells
+        cells_dict = game_model.cells_dict
         next_pos = (hero.cell_pos[0] + self.movement[key_event][0],
                     hero.cell_pos[1] + self.movement[key_event][1])
-        if next_pos not in cells or cells[next_pos].cell_type == CellType.Wall:
+        if next_pos not in cells_dict or cells_dict[next_pos].cell_type == CellType.Wall:
             return
         hero.cell_pos = next_pos
 

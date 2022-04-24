@@ -1,0 +1,21 @@
+{
+  "images": {
+    "0": "empty_block.png",
+  },
+  "cells_amount": [3, 2],
+  "map": {
+    "cell_types": [
+      "0","0",
+      "0","0"
+    ],
+    "cell_images": [
+      "0","0",
+      "0","0"
+    ]
+  },
+  "hero": {
+    "position" : [0, 0],
+    "image_key" : "0"
+  },
+  "enemies": []
+}
