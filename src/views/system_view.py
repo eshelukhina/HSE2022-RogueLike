@@ -31,14 +31,19 @@ class SystemView:
 
         self.smallfont = pygame.font.SysFont('Corbel', 35)
         self.bigfont = pygame.font.SysFont('Corbel', 40)
-        start_text = self.smallfont.render(self.items[0], True, self.color)
-        learn_about_text = self.smallfont.render(self.items[1], True, self.color)
-        exit_text = self.smallfont.render(self.items[2], True, self.color)
+        start_text = self.bigfont.render(self.items[0], True, self.color)
+        learn_about_text = self.bigfont.render(self.items[1], True, self.color)
+        exit_text = self.bigfont.render(self.items[2], True, self.color)
 
+        rect_w, rect_h = 250, 80
         mid_w, mid_h = self.width / 2, self.height / 2
-        start_rect = pygame.Rect(mid_w, mid_h, 150, 50)
-        learn_about_rect = pygame.Rect(mid_w, mid_h + 60, 150, 50)
-        exit_rect = pygame.Rect(mid_w, mid_h + 120, 150, 50)
+        start_rect = pygame.Rect(mid_w, mid_h, rect_w, rect_h)
+        start_rect.center = mid_w, mid_h - 100
+        learn_about_rect = pygame.Rect(mid_w, mid_h + 60, rect_w, rect_h)
+        learn_about_rect.center = mid_w, mid_h
+        exit_rect = pygame.Rect(mid_w, mid_h + 120, rect_w, rect_h)
+        exit_rect.center = mid_w, mid_h + 100
+
         self.buttons = {self.items[0]: (start_text, start_rect), self.items[1]: (learn_about_text, learn_about_rect),
                         self.items[2]: (exit_text, exit_rect)}
 
@@ -62,7 +67,9 @@ class SystemView:
                 pygame.draw.rect(self.screen, self.color_light, button[1])
             else:
                 pygame.draw.rect(self.screen, self.color_dark, button[1])
-            self.screen.blit(button[0], (button[1].x + button[1].width / 3, button[1].y + button[1].height / 2))
+            rect = button[0].get_rect()
+            rect.center = button[1].center
+            self.screen.blit(button[0], rect)
 
     def update_current_elem(self, direction, elem, arr) -> str:
         """
