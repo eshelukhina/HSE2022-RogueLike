@@ -2,6 +2,7 @@ from typing import Tuple, Dict
 
 import pygame
 
+from src.config import Config
 from src.model.game_model import GameModel
 
 
@@ -17,7 +18,10 @@ class GameView:
         self.images = {}
         for image_key in image_dict:
             path_to_image: str = image_dict[image_key]
-            self.images[image_key] = pygame.image.load(path_to_image)
+            image = pygame.image.load(path_to_image)
+            image = pygame.transform.scale(image, (Config.BLOCK_WIDTH, Config.BLOCK_WIDTH))
+            image.set_colorkey(Config.Colors.WHITE)
+            self.images[image_key] = image
 
     def __get_cell_screen_pos__(self, cell_pos: Tuple[int, int], cell_size: Tuple[int, int]):
         cell_width, cell_height = cell_size
@@ -43,7 +47,6 @@ class GameView:
             self.screen.blit(image, rect)
         # draw hero
         hero = game_model.hero
-        print(hero.cell_pos)
         screen_pos = self.__get_cell_screen_pos__(hero.cell_pos, self.cell_size)
         rect = pygame.rect.Rect(screen_pos, self.cell_size)
         image = self.images[hero.image_key]

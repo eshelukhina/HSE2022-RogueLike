@@ -25,7 +25,7 @@ class App:
 
         self.game_handler = GameHandler(
             game_view=GameView(window_size=Config.WINDOW_SIZE,
-                               cell_size=(48, 48),
+                               cell_size=(Config.BLOCK_WIDTH, Config.BLOCK_HEIGHT),
                                image_dict=self.game_model.image_dict),
             game_model=self.game_model)
         self.inventory_handler = InventoryHandler()
