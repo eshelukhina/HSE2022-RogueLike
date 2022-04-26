@@ -69,6 +69,8 @@ class GameHandler:
         if event.type == pygame.QUIT:
             return State.EXIT
         elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_i:
+                return State.INVENTORY
             if event.key in self.movement:
                 hero = self.game_model.hero
                 cells = self.game_model.cells_dict
@@ -85,13 +87,17 @@ class GameHandler:
                         __fight__(hero, enemy)
                         if hero.damage > 10:
                             self.__set_confused_enemy__(enemies, enemy, ConfusedEnemy(enemy))
+                elif cells[next_pos].cell_type == CellType.Chest:
+                    chest_item = self.generate_item()
+                    self.game_model.inventory.add_item(chest_item)
+                    cells[next_pos].cell_type = CellType.Empty
                 for enemy in enemies:
                     if enemy.health > 0:
                         enemy.move(hero, enemies, cells)
                 # if hero is dead
                 if hero.health <= 0:
                     # todo YOU ARE DEAD screen with button to return to menu
-                    state.state_machine = State.EXIT
+                    return State.EXIT
                 # remove dead enemies
                 dead_enemies = list(filter(lambda e: e.health <= 0, enemies))
                 # reward

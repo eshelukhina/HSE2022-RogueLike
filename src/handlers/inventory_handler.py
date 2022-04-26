@@ -41,7 +41,7 @@ class InventoryHandler:
         self.print_game()
         if event.type == pygame.QUIT:
             self.close_inventory()
-            state.state_machine = State.EXIT
+            return State.EXIT
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_DOWN or event.key == pygame.K_UP \
                     or event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
@@ -53,8 +53,8 @@ class InventoryHandler:
                     self.inventory_view.display_item_handling()
             elif event.key == pygame.K_BACKSPACE:
                 self.close_inventory()
-                state.state_machine = State.GAME
-        return self.current_state
+                return State.GAME
+        return State.INVENTORY
 
     def press_button(self):
         if self.inventory_view.current_option_button == 0:

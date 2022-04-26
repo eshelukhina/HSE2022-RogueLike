@@ -17,7 +17,10 @@
   },
   "hero": {
     "position" : [0, 0],
-    "image_key" : "2"
+    "image_key" : "2",
+    "health": 100,
+    "exp": 0,
+    "damage": 12
   },
   "enemies": []
 }

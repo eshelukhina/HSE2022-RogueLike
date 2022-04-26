@@ -22,9 +22,11 @@ g_model = GameModel(
         (0, 1): Cell(image_key=0, cell_type=CellType.Empty),
         (0, 2): Cell(image_key=0, cell_type=CellType.Empty),
     },
-    hero=Hero(cell_pos=(0, 0), image_key=1),
+    hero=Hero(health=100, max_health=100, exp=0, level=0,
+                 cell_pos=(0, 0), damage=10, image_key=1),
     enemies=[],
-    image_dict={0: 'block', 1: 'hero'}
+    image_dict={0: 'block', 1: 'hero'},
+    inventory=None
 )
 
 
