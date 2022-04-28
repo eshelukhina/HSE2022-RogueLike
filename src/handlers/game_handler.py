@@ -1,18 +1,17 @@
 from typing import List, Tuple, Optional
 
+import numpy as np
 import pygame
+
 from src.entities.armor import Armor
-from src import state
 from src.entities.cell import CellType
 from src.entities.confused_enemy import ConfusedEnemy
 from src.entities.enemy import Enemy
-from src.entities.weapon import Weapon
 from src.entities.hero import Hero
+from src.entities.weapon import Weapon
 from src.model.game_model import GameModel
 from src.state import State
 from src.views.game_view import GameView
-
-import numpy as np
 
 
 def __fight__(hero: Hero, enemy: Enemy):
@@ -35,7 +34,6 @@ class GameHandler:
     def __init__(self, game_model: GameModel, game_view: GameView):
         self.game_view = game_view
         self.game_model = game_model
-
 
     def __get_next_hero_pos__(self, key_event: int, hero: Hero) -> Tuple[int, int]:
         next_pos = (hero.cell_pos[0] + self.movement[key_event][0],

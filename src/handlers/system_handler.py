@@ -1,11 +1,9 @@
 import pygame
 
 from src.config import Config
-from src.entities.inventory import Inventory
 from src.save_slot import SaveSlot
-from src.views.system_view import SystemView
 from src.state import State
-from src import state
+from src.views.system_view import SystemView
 
 
 class SystemHandler:

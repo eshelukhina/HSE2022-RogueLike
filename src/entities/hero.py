@@ -10,7 +10,7 @@ class Hero:
     """
 
     def __init__(self, *, health: int, max_health: int, exp: int, level: int,
-                 cell_pos: Tuple[int, int], image_key: int, damage: int):
+                 cell_pos: Tuple[int, int], image_key: str, damage: int):
         self.health = health
         self.max_health = max_health
         self.exp = exp

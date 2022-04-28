@@ -1,4 +1,5 @@
 from typing import Tuple
+
 from src.entities.cell import CellType
 from src.entities.enemy import Enemy
 
@@ -17,8 +18,10 @@ def __try_move__(next_pos, hero, enemies, cells) -> bool:
         return False
     return True
 
+
 class CowardEnemy(Enemy):
-    def __init__(self, health, max_health: int, cell_pos, image_key: int, damage: int, exp_gain: int, scare_radius: int):
+    def __init__(self, health, max_health: int, cell_pos, image_key: str, damage: int, exp_gain: int,
+                 scare_radius: int):
         super().__init__(health, max_health, cell_pos, image_key, damage, exp_gain)
         self.scare_radius = scare_radius
 

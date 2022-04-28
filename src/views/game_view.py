@@ -22,6 +22,7 @@ def reddening(surf, alpha):
     redsurf.blit(redshade, (0, 0))
     return redsurf
 
+
 class GameView:
     """
     Класс ответственный за вывод на экран карты и других обьектов

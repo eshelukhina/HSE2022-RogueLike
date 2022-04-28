@@ -1,9 +1,7 @@
 import pygame
 
-from src import state
 from src.config import Config
 from src.entities.armor import Armor
-from src.entities.inventory import Inventory
 from src.entities.weapon import Weapon
 from src.state import State
 from src.views.inventory_view import InventoryView
