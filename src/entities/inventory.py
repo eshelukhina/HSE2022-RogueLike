@@ -28,3 +28,9 @@ class Inventory:
             self.equipped_weapon = i
         elif isinstance(self.items[i], Armor):
             self.equipped_armor = i
+
+    def unequip_item(self, i):
+        if isinstance(self.items[i], Weapon):
+            self.equipped_weapon = -1
+        elif isinstance(self.items[i], Armor):
+            self.equipped_armor = -1

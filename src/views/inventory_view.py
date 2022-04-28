@@ -66,8 +66,13 @@ class InventoryView:
         self.display_current_items()
         pygame.display.update()
 
+    def is_item_equipped(self):
+        return self.current_item == self.inventory.equipped_weapon or self.current_item == self.inventory.equipped_armor
+
     def display_item_handling(self) -> None:
         """Отобразить возможные действия с предметами"""
+        if self.inventory.items[self.current_item] is None:
+            return
         self.option_button = {}
         self.show_item_buttons = True
         rect = self.items[self.current_item]
@@ -75,7 +80,7 @@ class InventoryView:
         current_item_options_rect.bottomleft = rect.center
         pygame.draw.rect(self.screen, self.color_options, current_item_options_rect)
         is_equipped = "Unequipped gear"
-        if self.current_item == self.inventory.equipped_weapon or self.current_item == self.inventory.equipped_armor:
+        if self.is_item_equipped():
             is_equipped = "Equipped gear"
         diff = 0
         for text in self.buttons[is_equipped]:

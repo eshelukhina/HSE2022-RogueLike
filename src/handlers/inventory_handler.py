@@ -51,23 +51,33 @@ class InventoryHandler:
                     self.press_button()
                 else:
                     self.inventory_view.display_item_handling()
-            elif event.key == pygame.K_BACKSPACE:
+            elif event.key == pygame.K_i:
                 self.close_inventory()
                 return State.GAME
         return State.INVENTORY
 
+    def unequip_item(self):
+        if self.game_model.inventory.equipped_armor == self.inventory_view.current_item:
+            self.game_model.hero.unequip_armor()
+        elif self.game_model.inventory.equipped_weapon == self.inventory_view.current_item:
+            self.game_model.hero.unequip_weapon()
+        self.game_model.inventory.unequip_item(self.inventory_view.current_item)
+
+    def equip_item(self):
+        if isinstance(self.game_model.inventory.items[self.inventory_view.current_item], Weapon):
+            self.game_model.hero.equip_weapon(self.game_model.inventory.items[self.inventory_view.current_item])
+        elif isinstance(self.game_model.inventory.items[self.inventory_view.current_item], Armor):
+            self.game_model.hero.equip_armor(self.game_model.inventory.items[self.inventory_view.current_item])
+        self.game_model.inventory.equip_item(self.inventory_view.current_item)
+
     def press_button(self):
         if self.inventory_view.current_option_button == 0:
-            if self.game_model.inventory.equipped_armor == self.inventory_view.current_item:
-                self.game_model.hero.unequip_armor()
-            elif self.game_model.inventory.equipped_weapon == self.inventory_view.current_item:
-                self.game_model.hero.unequip_weapon()
+            self.unequip_item()
             self.game_model.inventory.discard_item(self.inventory_view.current_item)
         elif self.inventory_view.current_option_button == 1:
-            if self.game_model.inventory.items[self.inventory_view.current_item] == Weapon:
-                self.game_model.hero.equip_weapon(self.game_model.inventory.items[self.inventory_view.current_item])
-            elif self.game_model.inventory.items[self.inventory_view.current_item] == Armor:
-                self.game_model.hero.equip_armor(self.game_model.inventory.items[self.inventory_view.current_item])
-            self.game_model.inventory.equip_item(self.inventory_view.current_item)
+            if not self.inventory_view.is_item_equipped():
+                self.equip_item()
+            else:
+                self.unequip_item()
         self.inventory_view.show_item_buttons = False
         self.inventory_view.display_inventory()
