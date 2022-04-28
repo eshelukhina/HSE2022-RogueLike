@@ -10,6 +10,7 @@ class SystemHandler:
     """
     Отвечает за работу с главным меню
     """
+
     def __init__(self):
         self.slots = []
         self.current_item = "Start"

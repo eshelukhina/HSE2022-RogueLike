@@ -1,5 +1,3 @@
-from typing import Tuple
-
 import pygame
 
 from src.entities.cell import CellType

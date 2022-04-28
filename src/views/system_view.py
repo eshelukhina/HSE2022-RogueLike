@@ -1,6 +1,6 @@
-import pygame
-
 from typing import Tuple
+
+import pygame
 
 
 class SystemView:
@@ -53,10 +53,10 @@ class SystemView:
         :return None
         """
         self.screen.fill((60, 25, 60))
-        self.display_items()
+        self.__display_items__()
         pygame.display.update()
 
-    def display_items(self) -> None:
+    def __display_items__(self) -> None:
         """
         Создание и отрисовка элементов меню
         :return: None
@@ -71,7 +71,7 @@ class SystemView:
             rect.center = button[1].center
             self.screen.blit(button[0], rect)
 
-    def update_current_elem(self, direction, elem, arr) -> str:
+    def __update_current_elem__(self, direction, elem, arr) -> str:
         """
         Обновляет текущий выбранный элемент
         :param direction: Направление которое указал пользователь
@@ -82,29 +82,29 @@ class SystemView:
         index = arr.index(elem)
         return arr[(index + direction) % len(arr)]
 
-    def move_cursor_menu(self, key) -> None:
+    def __move_cursor_menu__(self, key) -> None:
         """
         Передвижение курсора по меню
         :param key: кнопка нажатая пользователем
         :return: None
         """
         if key == pygame.K_DOWN:
-            self.current_item = self.update_current_elem(1, self.current_item, self.items)
+            self.current_item = self.__update_current_elem__(1, self.current_item, self.items)
         elif key == pygame.K_UP:
-            self.current_item = self.update_current_elem(-1, self.current_item, self.items)
+            self.current_item = self.__update_current_elem__(-1, self.current_item, self.items)
         self.display_menu()
 
-    def move_cursor_save_slots(self, key) -> None:
+    def __move_cursor_save_slots__(self, key) -> None:
         """
         Передвижение курсора по слотам
         :param key: кнопка нажатая пользователем
         :return: None
         """
         if key == pygame.K_DOWN:
-            self.current_slot = self.update_current_elem(1, self.current_slot, self.save_slots)
+            self.current_slot = self.__update_current_elem__(1, self.current_slot, self.save_slots)
         elif key == pygame.K_UP:
-            self.current_slot = self.update_current_elem(-1, self.current_slot, self.save_slots)
-        self.display_saving_slots()
+            self.current_slot = self.__update_current_elem__(-1, self.current_slot, self.save_slots)
+        self.__display_saving_slots__()
 
     def move_cursor(self, key) -> None:
         """
@@ -113,11 +113,11 @@ class SystemView:
         :return: None
         """
         if self.current_window == "Menu":
-            self.move_cursor_menu(key)
+            self.__move_cursor_menu__(key)
         if self.current_window == "Save slots":
-            self.move_cursor_save_slots(key)
+            self.__move_cursor_save_slots__(key)
 
-    def display_saving_slots(self, slots=None) -> None:
+    def __display_saving_slots__(self, slots=None) -> None:
         """
         Создание и отрисовка слотов
         :param slots: сохраненные состояния слотов
@@ -193,7 +193,7 @@ class SystemView:
         """
         self.current_window = "Save slots"
         self.current_save_slots_state = "Start"
-        self.display_saving_slots(slots)
+        self.__display_saving_slots__(slots)
 
     def press_reset_(self, slots) -> None:
         """
@@ -203,7 +203,7 @@ class SystemView:
         """
         self.current_window = "Save slots"
         self.current_save_slots_state = "Reset"
-        self.display_saving_slots(slots)
+        self.__display_saving_slots__(slots)
 
     def press_choose_reset_save_slot(self) -> None:
         """
