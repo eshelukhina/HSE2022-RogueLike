@@ -18,21 +18,17 @@ class App:
     def __init__(self):
         pygame.init()
         self.clock = pygame.time.Clock()
-
         self.cur_state = State.MENU
 
-        level_loader = DefaultLeverLoader(path_to_levels='levels', path_to_textures='textures')
-        self.game_model = level_loader.load('default.json')
+        self.level_loader = DefaultLeverLoader(path_to_levels='levels', path_to_textures='textures')
 
         self.game_handler = GameHandler(
             game_view=GameView(window_size=Config.WINDOW_SIZE,
-                               cell_size=(Config.BLOCK_WIDTH, Config.BLOCK_HEIGHT),
-                               image_dict=self.game_model.image_dict),
-            game_model=self.game_model)
-        self.inventory = Inventory()
-        self.inventory_handler = InventoryHandler()
+                               cell_size=(Config.BLOCK_WIDTH, Config.BLOCK_HEIGHT)),
+            game_model=None
+        )
         self.system_handler = SystemHandler()
-        self.inventory_handler.set_game_model(self.game_model)
+        self.inventory_handler = InventoryHandler()
 
     def run(self):
         """
@@ -46,6 +42,9 @@ class App:
                     self.cur_state = self.system_handler.run(event)
                     # todo not pretty but this what is needed to be done
                     if self.cur_state == State.GAME:
+                        game_model = self.level_loader.load('default.json')
+                        self.game_handler.set_game_model(game_model)
+                        self.inventory_handler.set_game_model(game_model)
                         self.game_handler.print_game()
                 elif self.cur_state == State.GAME:
                     self.cur_state = self.game_handler.run(event)

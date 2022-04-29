@@ -1,11 +1,13 @@
-import numpy as np
 import os
-import pygame
-
 from typing import Tuple, Dict
+
+import numpy as np
+import pygame
+from pygame.math import Vector2
 
 from src.config import Config
 from src.model.game_model import GameModel
+from src.views.Camera import Camera
 
 
 def reddening(surf, alpha):
@@ -31,9 +33,10 @@ class GameView:
     BAR_WIDTH = Config.BLOCK_WIDTH * 3
     BAR_HEIGHT = Config.BLOCK_HEIGHT
 
-    def __init__(self, *, window_size: Tuple[int, int], cell_size: Tuple[int, int], image_dict: Dict[str, str]):
-        self.screen = pygame.display.set_mode(window_size)
-        self.cell_size = cell_size
+    def __init_camera__(self, hero_pos):
+        self.camera = Camera(hero_pos)
+
+    def __init_dict__(self, image_dict: Dict[str, str]):
         self.images = {}
         for image_key in image_dict:
             path_to_image: str = image_dict[image_key]
@@ -41,16 +44,22 @@ class GameView:
             image = pygame.transform.scale(image, (Config.BLOCK_WIDTH, Config.BLOCK_WIDTH))
             image.set_colorkey(Config.Colors.WHITE)
             self.images[image_key] = image
+
+    def __init__(self, *, window_size: Tuple[int, int], cell_size: Tuple[int, int]):
+        self.camera = None
+        self.screen = pygame.display.set_mode(window_size)
+        self.cell_size = cell_size
+        # TODO fix hardcode font size
+        self.font = pygame.font.SysFont('Corbel', 25)
+
         path_to_frame = os.path.join(Config.PATH_TO_TEXTURES, "frame.png")
         self.frame = pygame.image.load(path_to_frame)
         self.frame = pygame.transform.scale(self.frame, (self.BAR_WIDTH, self.BAR_HEIGHT))
-        # TODO fix hardcode font size
-        self.font = pygame.font.SysFont('Corbel', 25)
 
     def __get_cell_screen_pos__(self, cell_pos: Tuple[int, int], cell_size: Tuple[int, int]):
         cell_width, cell_height = cell_size
         cell_pos_x, cell_pos_y = cell_pos
-        return cell_pos_x * cell_width, cell_pos_y * cell_height
+        return (cell_pos_x * cell_width, cell_pos_y * cell_height)
 
     def __draw_bar__(self, pos: Tuple[int, int], fill: int, fill_color: Tuple[int, int, int],
                      main_color: Tuple[int, int, int], text: str):
@@ -82,23 +91,26 @@ class GameView:
         :param game_model: обьекты карты
         :return: None
         """
-        if self.images is None:
-            raise ValueError('images is not set')
         self.screen.fill(Config.Colors.BACKGROUND_COLOR)
+        if self.images is None:
+            self.__init_dict__(image_dict=game_model.image_dict)
+        hero = game_model.hero
+        screen_pos = self.__get_cell_screen_pos__(hero.cell_pos, self.cell_size)
+        if self.camera is None:
+            self.__init_camera__(hero_pos=screen_pos)
+        self.camera.set_shift(Vector2(screen_pos))
         # draw cells
         cells_dict = game_model.cells_dict
         for cell_pos in cells_dict:
             cell = cells_dict[cell_pos]
-            screen_pos = self.__get_cell_screen_pos__(cell_pos, self.cell_size)
-            rect = pygame.rect.Rect(screen_pos, self.cell_size)
+            cell_screen_pos = self.__get_cell_screen_pos__(cell_pos, self.cell_size)
+            rect = pygame.rect.Rect(cell_screen_pos, self.cell_size)
             image = self.images[cell.image_key]
-            self.screen.blit(image, rect)
+            self.screen.blit(image, rect.topleft - self.camera.get_shift())
         # draw hero
-        hero = game_model.hero
-        screen_pos = self.__get_cell_screen_pos__(hero.cell_pos, self.cell_size)
         rect = pygame.rect.Rect(screen_pos, self.cell_size)
         image = self.images[hero.image_key]
-        self.screen.blit(image, rect)
+        self.screen.blit(image, rect.topleft - self.camera.get_shift())
         # draw enemies
         for enemy in game_model.enemies:
             screen_pos = self.__get_cell_screen_pos__(enemy.cell_pos, self.cell_size)
@@ -107,7 +119,7 @@ class GameView:
             if enemy.health < enemy.max_health:
                 alpha = 100 * (1 - (enemy.health / float(enemy.max_health))) + 10
                 image = reddening(image, alpha)
-            self.screen.blit(image, rect)
+            self.screen.blit(image, rect.topleft - self.camera.get_shift())
         # draw health
         health = hero.health
         max_health = hero.max_health

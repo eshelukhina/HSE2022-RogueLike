@@ -31,7 +31,7 @@ class GameHandler:
         pygame.K_DOWN: (0, 1)
     }
 
-    def __init__(self, game_model: GameModel, game_view: GameView):
+    def __init__(self, game_view: GameView, game_model: Optional[GameModel]):
         self.game_view = game_view
         self.game_model = game_model
 
@@ -54,6 +54,9 @@ class GameHandler:
             if enemies[i] is enemy:
                 enemies[i] = confused_enemy
                 return
+
+    def set_game_model(self, game_model: GameModel):
+        self.game_model = game_model
 
     def print_game(self):
         self.game_view.view_load(self.game_model)
