@@ -40,14 +40,14 @@ class GameHandler:
                     hero.cell_pos[1] + self.movement[key_event][1])
         return next_pos
 
-    def __get_enemy_by_pos__(self, enemies: List[Enemy], cell_pos: Tuple[int, int]) -> Optional[Enemy]:
-        res_enemy = None
-        for enemy in enemies:
-            if enemy.cell_pos[0] == cell_pos[0] and enemy.cell_pos[1] == cell_pos[1]:
-                if res_enemy is not None:
-                    raise ValueError(f'Two enemies is on the same cell - {enemy.cell_pos}')
-                res_enemy = enemy
-        return res_enemy
+    def __get_entity_by_pos__(self, entities, cell_pos: Tuple[int, int]):
+        res_entity = None
+        for entity in entities:
+            if entity.cell_pos[0] == cell_pos[0] and entity.cell_pos[1] == cell_pos[1]:
+                if res_entity is not None:
+                    raise ValueError(f'Two enemies is on the same cell - {entity.cell_pos}')
+                res_entity = entity
+        return res_entity
 
     def __set_confused_enemy__(self, enemies: List[Enemy], enemy: Enemy, confused_enemy):
         for i in range(len(enemies)):
@@ -76,22 +76,26 @@ class GameHandler:
                 hero = self.game_model.hero
                 cells = self.game_model.cells_dict
                 enemies = self.game_model.enemies
+                chests = self.game_model.chests
                 next_pos = self.__get_next_hero_pos__(event.key, hero)
                 # todo block hp and exp bars
                 if next_pos not in cells or cells[next_pos].cell_type == CellType.Wall:
                     return State.GAME
-                enemy = self.__get_enemy_by_pos__(enemies, next_pos)
                 if cells[next_pos].cell_type == CellType.Empty:
-                    if enemy is None:
-                        hero.cell_pos = next_pos
-                    else:
+                    enemy = self.__get_entity_by_pos__(enemies, next_pos)
+                    chest = self.__get_entity_by_pos__(chests, next_pos)
+                    if enemy:
                         __fight__(hero, enemy)
+                        # TODO confused mobs set a rule
                         if hero.damage > 10:
                             self.__set_confused_enemy__(enemies, enemy, ConfusedEnemy(enemy))
-                elif cells[next_pos].cell_type == CellType.Chest:
-                    chest_item = self.generate_item()
-                    self.game_model.inventory.add_item(chest_item)
-                    cells[next_pos].cell_type = CellType.Empty
+                    elif chest:
+                        # TODO store items in chest, not generate the in place
+                        chest_item = self.generate_item()
+                        self.game_model.inventory.add_item(chest_item)
+                        chests.remove(chest)
+                    else:
+                        hero.cell_pos = next_pos
                 for enemy in enemies:
                     if enemy.health > 0:
                         enemy.move(hero, enemies, cells)
@@ -126,5 +130,4 @@ class GameHandler:
 
     def generate_armor(self):
         return Armor(image="armor1.jpg",
-                     defence=np.random.randint(low=1, high=self.game_model.hero.level + 2, size=1)[0],
-                     name="")
+                     defence=np.random.randint(low=1, high=self.game_model.hero.level + 2, size=1)[0], name="")

@@ -7,7 +7,7 @@ from pygame.math import Vector2
 
 from src.config import Config
 from src.model.game_model import GameModel
-from src.views.Camera import Camera
+from src.views.camera import Camera
 
 
 def reddening(surf, alpha):
@@ -106,11 +106,19 @@ class GameView:
             cell_screen_pos = self.__get_cell_screen_pos__(cell_pos, self.cell_size)
             rect = pygame.rect.Rect(cell_screen_pos, self.cell_size)
             image = self.images[cell.image_key]
-            self.screen.blit(image, rect.topleft - self.camera.get_shift())
+            self.screen.blit(image, Vector2(rect.topleft) - self.camera.get_shift())
+        # draw chests
+        chests = game_model.chests
+        for chest in chests:
+            cell_pos = chest.cell_pos
+            cell_screen_pos = self.__get_cell_screen_pos__(cell_pos, self.cell_size)
+            rect = pygame.rect.Rect(cell_screen_pos, self.cell_size)
+            image = self.images[chest.image_key]
+            self.screen.blit(image, Vector2(rect.topleft) - self.camera.get_shift())
         # draw hero
         rect = pygame.rect.Rect(screen_pos, self.cell_size)
         image = self.images[hero.image_key]
-        self.screen.blit(image, rect.topleft - self.camera.get_shift())
+        self.screen.blit(image, Vector2(rect.topleft) - self.camera.get_shift())
         # draw enemies
         for enemy in game_model.enemies:
             screen_pos = self.__get_cell_screen_pos__(enemy.cell_pos, self.cell_size)
@@ -119,7 +127,7 @@ class GameView:
             if enemy.health < enemy.max_health:
                 alpha = 100 * (1 - (enemy.health / float(enemy.max_health))) + 10
                 image = reddening(image, alpha)
-            self.screen.blit(image, rect.topleft - self.camera.get_shift())
+            self.screen.blit(image, Vector2(rect.topleft) - self.camera.get_shift())
         # draw health
         health = hero.health
         max_health = hero.max_health

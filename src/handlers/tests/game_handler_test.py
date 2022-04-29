@@ -10,7 +10,6 @@ from src.model.game_model import GameModel
 from src.handlers.game_handler import GameHandler
 from src.state import State
 
-
 g_model = GameModel(
     cells_dict={
         (2, 0): Cell(image_key=0, cell_type=CellType.Wall),
@@ -26,12 +25,12 @@ g_model = GameModel(
         (0, 2): Cell(image_key=0, cell_type=CellType.Empty),
     },
     hero=Hero(health=100, max_health=100, exp=0, level=0,
-                 cell_pos=(0, 0), damage=10, image_key=1),
+              cell_pos=(0, 0), damage=10, image_key=1),
     enemies=[],
     image_dict={0: 'block', 1: 'hero'},
-    inventory=None
+    inventory=None,
+    chests=[]
 )
-
 
 no_walls_g_model = GameModel(
     cells_dict={
@@ -72,11 +71,13 @@ no_walls_g_model = GameModel(
         (4, 4): Cell(image_key=0, cell_type=CellType.Empty),
     },
     hero=Hero(health=100, max_health=100, exp=0, level=0,
-                 cell_pos=(0, 0), damage=10, image_key=1),
+              cell_pos=(0, 0), damage=10, image_key=1),
     enemies=[],
     image_dict={0: 'block', 1: 'hero'},
-    inventory=None
+    inventory=None,
+    chests=[]
 )
+
 
 class MockView:
     def view_load(self, game_model: GameModel):
