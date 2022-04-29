@@ -16,5 +16,5 @@ class Config:
         GREY = (94, 94, 94)
         BLACK = (0, 0, 0)
         YELLOW = (255, 227, 112)
-        BACKGROUND_COLOR = (0, 0, 0)
+        BACKGROUND_COLOR = (28, 17, 23)
         WHITE = (255, 255, 255)
