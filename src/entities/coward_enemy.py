@@ -20,9 +20,9 @@ def __try_move__(next_pos, hero, enemies, cells) -> bool:
 
 
 class CowardEnemy(Enemy):
-    def __init__(self, health, max_health: int, cell_pos, image_key: str, damage: int, exp_gain: int,
+    def __init__(self, health, max_health: int, cell_pos, image_name: str, damage: int, exp_gain: int,
                  scare_radius: int):
-        super().__init__(health, max_health, cell_pos, image_key, damage, exp_gain)
+        super().__init__(health, max_health, cell_pos, image_name, damage, exp_gain)
         self.scare_radius = scare_radius
 
     def move(self, hero, enemies, cells):

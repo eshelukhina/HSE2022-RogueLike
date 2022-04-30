@@ -24,14 +24,14 @@ def test_simple():
     assert len(cells_dict) == 2 * 2
     for cnt, cell in enumerate(game_model.cells_dict.values()):
         if cnt < 2:
-            assert cell.image_key == '0'
+            assert cell.image_name == '0'
             assert cell.cell_type == CellType.Empty
         else:
-            assert cell.image_key == '1'
+            assert cell.image_name == '1'
             assert cell.cell_type == CellType.Wall
     hero = game_model.hero
     assert hero
-    assert hero.image_key == '2'
+    assert hero.image_name == '2'
     assert hero.cell_pos == (0, 0)
 
 

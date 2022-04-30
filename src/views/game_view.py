@@ -38,12 +38,12 @@ class GameView:
 
     def __init_dict__(self, image_dict: Dict[str, str]):
         self.images = {}
-        for image_key in image_dict:
-            path_to_image: str = image_dict[image_key]
+        for image_name in image_dict:
+            path_to_image: str = image_dict[image_name]
             image = pygame.image.load(path_to_image)
             image = pygame.transform.scale(image, (Config.BLOCK_WIDTH, Config.BLOCK_WIDTH))
             image.set_colorkey(Config.Colors.WHITE)
-            self.images[image_key] = image
+            self.images[image_name] = image
 
     def __init__(self, *, window_size: Tuple[int, int], cell_size: Tuple[int, int]):
         self.camera = None
@@ -105,7 +105,7 @@ class GameView:
             cell = cells_dict[cell_pos]
             cell_screen_pos = self.__get_cell_screen_pos__(cell_pos, self.cell_size)
             rect = pygame.rect.Rect(cell_screen_pos, self.cell_size)
-            image = self.images[cell.image_key]
+            image = self.images[cell.image_name]
             self.screen.blit(image, Vector2(rect.topleft) - self.camera.get_shift())
         # draw chests
         chests = game_model.chests
@@ -113,17 +113,17 @@ class GameView:
             cell_pos = chest.cell_pos
             cell_screen_pos = self.__get_cell_screen_pos__(cell_pos, self.cell_size)
             rect = pygame.rect.Rect(cell_screen_pos, self.cell_size)
-            image = self.images[chest.image_key]
+            image = self.images[chest.image_name]
             self.screen.blit(image, Vector2(rect.topleft) - self.camera.get_shift())
         # draw hero
         rect = pygame.rect.Rect(screen_pos, self.cell_size)
-        image = self.images[hero.image_key]
+        image = self.images[hero.image_name]
         self.screen.blit(image, Vector2(rect.topleft) - self.camera.get_shift())
         # draw enemies
         for enemy in game_model.enemies:
             screen_pos = self.__get_cell_screen_pos__(enemy.cell_pos, self.cell_size)
             rect = pygame.rect.Rect(screen_pos, self.cell_size)
-            image = self.images[enemy.image_key].convert_alpha()
+            image = self.images[enemy.image_name].convert_alpha()
             if enemy.health < enemy.max_health:
                 alpha = 100 * (1 - (enemy.health / float(enemy.max_health))) + 10
                 image = reddening(image, alpha)

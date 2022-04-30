@@ -8,9 +8,9 @@ from src.handlers.game_handler import __fight__
 
 
 class AggressiveEnemy(Enemy):
-    def __init__(self, health: int, max_health: int, cell_pos, image_key: str, damage: int, exp_gain: int,
+    def __init__(self, health: int, max_health: int, cell_pos, image_name: str, damage: int, exp_gain: int,
                  attack_radius: int):
-        super().__init__(health, max_health, cell_pos, image_key, damage, exp_gain)
+        super().__init__(health, max_health, cell_pos, image_name, damage, exp_gain)
         self.attack_radius = attack_radius
 
     def __try_move__(self, num_steps: int, pos: Tuple[int, int], enemies: List[Enemy],
