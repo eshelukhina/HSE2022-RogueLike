@@ -98,6 +98,15 @@
       "strategy": "passive",
       "damage": 15,
       "exp_gain": 200
+    },
+    {
+      "position" : [6, 4],
+      "health": 15,
+      "fabric": "fantasy",
+      "strategy": "replicating",
+      "damage": 15,
+      "exp_gain": 200,
+      "chance_of_cloning": 0.1
     }
   ],
   "chests": [

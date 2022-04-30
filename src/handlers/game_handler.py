@@ -96,7 +96,8 @@ class GameHandler:
                         chests.remove(chest)
                     else:
                         hero.cell_pos = next_pos
-                for enemy in enemies:
+                for i in range(len(enemies)):
+                    enemy = enemies[i]
                     if enemy.health > 0:
                         enemy.move(hero, enemies, cells)
                 # if hero is dead

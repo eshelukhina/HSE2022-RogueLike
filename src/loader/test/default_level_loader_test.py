@@ -14,9 +14,9 @@ def test_simple():
     image_dict = game_model.image_dict
     assert image_dict
     assert game_model.image_dict == {
-        '0': os.path.join(path_to_textures, 'empty_block.png'),
-        '1': os.path.join(path_to_textures, 'wall.png'),
-        '2': os.path.join(path_to_textures, 'hero.png')
+        'empty_block.png': os.path.join(path_to_textures, 'empty_block.png'),
+        'wall.png': os.path.join(path_to_textures, 'wall.png'),
+        'hero.png': os.path.join(path_to_textures, 'hero.png')
     }
 
     cells_dict = game_model.cells_dict
@@ -24,14 +24,14 @@ def test_simple():
     assert len(cells_dict) == 2 * 2
     for cnt, cell in enumerate(game_model.cells_dict.values()):
         if cnt < 2:
-            assert cell.image_name == '0'
+            assert cell.image_name == 'empty_block.png'
             assert cell.cell_type == CellType.Empty
         else:
-            assert cell.image_name == '1'
+            assert cell.image_name == 'wall.png'
             assert cell.cell_type == CellType.Wall
     hero = game_model.hero
     assert hero
-    assert hero.image_name == '2'
+    assert hero.image_name == 'hero.png'
     assert hero.cell_pos == (0, 0)
 
 

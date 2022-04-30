@@ -10,9 +10,10 @@ from src.entities.enemy import Enemy
 from src.entities.hero import Hero
 from src.entities.inventory import Inventory
 from src.entities.passive_enemy import PassiveEnemy
-from src.model.game_model import GameModel
-from src.fabrics.fantasy_enemy_factory import FantasyEnemyFactory
+from src.entities.replicating_enemy import ReplicatingEnemy
 from src.fabrics.abstract_enemy_factory import AbstractEnemyFactory
+from src.fabrics.fantasy_enemy_factory import FantasyEnemyFactory
+from src.model.game_model import GameModel
 
 
 def __load_base_enemy_info__(enemy_info):
@@ -44,7 +45,18 @@ def __load_aggressive_enemy__(enemy_info, fabrics: Dict[str, AbstractEnemyFactor
     if fabric not in fabrics:
         raise ValueError(f"Unknown fabric {fabric}")
     return fabrics[fabric].create_aggressive_enemy(
-        health=health, max_health=health, cell_pos=cell_pos, attack_radius=attack_radius, damage=damage, exp_gain=exp_gain)
+        health=health, max_health=health, cell_pos=cell_pos, attack_radius=attack_radius, damage=damage,
+        exp_gain=exp_gain)
+
+
+def __load_replicating_enemy__(enemy_info, fabrics: Dict[str, AbstractEnemyFactory]) -> ReplicatingEnemy:
+    health, cell_pos, fabric, damage, exp_gain = __load_base_enemy_info__(enemy_info)
+    chance_of_cloning = enemy_info['chance_of_cloning']
+    if fabric not in fabrics:
+        raise ValueError(f"Unknown fabric {fabric}")
+    return fabrics[fabric].create_replicating_enemy(
+        health=health, max_health=health, cell_pos=cell_pos, damage=damage, chance_of_cloning=chance_of_cloning,
+        exp_gain=exp_gain)
 
 
 def __load_chest__(chest_info, image_map, images):
@@ -73,7 +85,8 @@ class DefaultLeverLoader:
     STRATEGY_TO_ENEMY = {
         'passive': __load_passive_enemy__,
         'coward': __load_coward_enemy__,
-        'aggressive': __load_aggressive_enemy__
+        'aggressive': __load_aggressive_enemy__,
+        'replicating': __load_replicating_enemy__
     }
     FABRIC_TO_CLASS = {
         'fantasy': FantasyEnemyFactory
@@ -93,6 +106,8 @@ class DefaultLeverLoader:
                         f'{curr} index out of range. Check cells_amount and cells_images/cell_types are consistent.'
                     )
                 image_key = cell_images[curr]
+                if image_key not in info['images']:
+                    raise ValueError(f'Image with key {image_key} is unknown')
                 image_name = info['images'][image_key]
                 if image_name not in images:
                     raise ValueError(f'Image {image_name} is unknown')

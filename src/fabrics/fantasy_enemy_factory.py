@@ -1,10 +1,11 @@
 import random
 from typing import List
 
-from src.fabrics.abstract_enemy_factory import AbstractEnemyFactory
-from src.entities.passive_enemy import PassiveEnemy
 from src.entities.aggressive_enemy import AggressiveEnemy
 from src.entities.coward_enemy import CowardEnemy
+from src.entities.passive_enemy import PassiveEnemy
+from src.entities.replicating_enemy import ReplicatingEnemy
+from src.fabrics.abstract_enemy_factory import AbstractEnemyFactory
 
 
 class FantasyEnemyFactory(AbstractEnemyFactory):
@@ -13,7 +14,8 @@ class FantasyEnemyFactory(AbstractEnemyFactory):
         self.images = {
             PassiveEnemy.__name__: ['skeleton.png', 'tiny_zombie.png'],
             AggressiveEnemy.__name__: ['devil.png'],
-            CowardEnemy.__name__: ['green_lizard.png']
+            CowardEnemy.__name__: ['green_lizard.png'],
+            ReplicatingEnemy.__name__: ['goblin.png', 'wood_goblin.png']
         }
 
     def get_required_images(self) -> List[str]:
@@ -42,3 +44,10 @@ class FantasyEnemyFactory(AbstractEnemyFactory):
         coward_enemy_image = self.__get_image__(CowardEnemy)
         return CowardEnemy(health=health, max_health=health, cell_pos=cell_pos, scare_radius=scare_radius,
                            image_name=coward_enemy_image, damage=damage, exp_gain=exp_gain)
+
+    def create_replicating_enemy(self, health, max_health: int, cell_pos, damage: int, exp_gain: int,
+                                 chance_of_cloning: float) -> ReplicatingEnemy:
+        replicating_enemy_image = self.__get_image__(ReplicatingEnemy)
+        return ReplicatingEnemy(health=health, max_health=health, cell_pos=cell_pos,
+                                chance_of_cloning=chance_of_cloning,
+                                image_name=replicating_enemy_image, damage=damage, exp_gain=exp_gain)
