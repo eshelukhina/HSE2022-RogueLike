@@ -7,10 +7,11 @@ from src.config import Config
 
 class InventoryView:
     """
-    Класс ответственный за отображение инвентаря
+    Класс, ответственный за отображение инвентаря
     """
 
     def __init__(self, window_size: Tuple[int, int]):
+        """:param window_size: размер окна игры"""
         self.option_button = {}
         self.buttons = {"Equipped gear": ["Discard", "Put Off", "Cancel"],
                         "Unequipped gear": ["Discard", "Put On", "Cancel"],
@@ -55,18 +56,20 @@ class InventoryView:
             counter += 1
 
     def add_inventory(self, inventory) -> None:
-        """Добавить инвентарь, который впоследствии будет отображаться"""
+        """Добавить инвентарь, который впоследствии будет отображаться
+        :param inventory: Инвентарь персонажа"""
         self.inventory = inventory
 
     def display_inventory(self) -> None:
-        """"Отобразить текущее состояние иннвентаря"""
+        """"Отобразить текущее состояние инвентаря"""
         self.screen.fill((60, 25, 60))
         self.display_windows()
         self.display_items()
         self.display_current_items()
         pygame.display.update()
 
-    def is_item_equipped(self):
+    def is_item_equipped(self) -> None:
+        """Является ли текущий предмет надетым на персонажа"""
         return self.current_item == self.inventory.equipped_weapon or self.current_item == self.inventory.equipped_armor
 
     def display_item_handling(self) -> None:
@@ -93,6 +96,7 @@ class InventoryView:
         self.display_options()
 
     def display_options(self) -> None:
+        """Отобразить возможные действия с текущим предметом"""
         for i, (key, value) in enumerate(self.option_button.items()):
             if i == self.current_option_button:
                 pygame.draw.rect(self.screen, self.color_light, value[1])
@@ -147,11 +151,16 @@ class InventoryView:
         self.screen.blit(desc_item2_render, current_item2_rect.center)
 
     def update_current_elem(self, direction, index, arr) -> str:
-        """"""
+        """Передвинуть курсор по списку
+        :param direction: направление передвижения по списку
+        :param index: текущий индекс в списке
+        :param arr: список
+        :return: новый индекс"""
         return (index + direction) % len(arr)
 
     def move_cursor_menu(self, key) -> None:
-        """Передвижение по предметам инвентаря"""
+        """Передвижение по предметам инвентаря
+        :param key: кнопка, нажатая игроком"""
         if key == pygame.K_DOWN:
             self.current_item = self.update_current_elem(self.len, self.current_item, self.items)
         elif key == pygame.K_UP:
@@ -163,6 +172,8 @@ class InventoryView:
         self.display_inventory()
 
     def move_cursor_item_handling(self, key) -> None:
+        """Передвижение по возможным действиям с текущим предметом
+        :param key: кнопка, нажатая игроком"""
         if key == pygame.K_DOWN:
             self.current_option_button = self.update_current_elem(1, self.current_option_button,
                                                                   list(self.option_button.keys()))
@@ -172,6 +183,8 @@ class InventoryView:
         self.display_options()
 
     def move_cursor(self, key) -> None:
+        """Передвижение курсора в зависимости от текщего состояния инвентаря
+        :param key: кнопка, нажатая игроком"""
         if self.show_item_buttons:
             self.move_cursor_item_handling(key)
         else:

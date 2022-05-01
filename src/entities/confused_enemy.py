@@ -5,6 +5,7 @@ from src.entities.enemy import Enemy
 
 
 class ConfusedEnemy(Enemy):
+    """Класс, ответственный за тактику растерянного противника"""
     movements = [(1, 0), (-1, 0), (0, 1), (0, -1)]
 
     def __init__(self, enemy: Enemy):

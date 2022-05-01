@@ -42,8 +42,9 @@ class Hero:
         self.damage += weapon.strength
 
     def unequip_weapon(self):
-        self.damage -= self.weapon.strength
-        self.weapon = None
+        if self.weapon is not None:
+            self.damage -= self.weapon.strength
+            self.weapon = None
 
     def equip_armor(self, armor: Armor):
         self.unequip_armor()
