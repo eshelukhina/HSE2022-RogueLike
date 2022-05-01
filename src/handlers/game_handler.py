@@ -15,9 +15,8 @@ from src.views.game_view import GameView
 
 
 def __fight__(hero: Hero, enemy: Enemy):
-    hero.health -= enemy.damage
+    hero.health -= enemy.damage - hero.damage_taken_modifier
     enemy.health -= hero.damage
-    pass
 
 
 class GameHandler:

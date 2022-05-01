@@ -44,7 +44,6 @@ class App:
             for event in pygame.event.get():
                 if self.cur_state == State.MENU:
                     self.cur_state = self.system_handler.run(event)
-                    # todo not pretty but this what is needed to be done
                     if self.cur_state == State.GAME:
                         self.game_handler.print_game()
                 elif self.cur_state == State.GAME:

@@ -2,6 +2,7 @@ from typing import Tuple
 
 
 class Enemy:
+    """Интерфейс для противников"""
     def __init__(self, health: int, max_health: int, cell_pos: Tuple[int, int],
                  image_key: str, damage: int, exp_gain: int):
         self.health = health

@@ -9,7 +9,7 @@ from src.views.inventory_view import InventoryView
 
 class InventoryHandler:
     """
-    Класс ответственен за обработку взаимодействия с инвентарем
+    Класс ответственный за обработку взаимодействия с инвентарем
     """
 
     def __init__(self):
@@ -19,21 +19,26 @@ class InventoryHandler:
         self.init_inventory = False
         self.game_model = None
 
-    def print_game(self):
+    def print_game(self) -> None:
+        """Показать окно с инвентарем, если оно еще не показывается"""
         if not self.init_inventory:
             self.inventory_view.display_inventory()
         self.init_inventory = True
 
-    def close_inventory(self):
+    def close_inventory(self) -> None:
+        """Поставить флаг, что окно с инвентарем больше не показывается"""
         self.init_inventory = False
 
-    def set_game_model(self, game_model):
+    def set_game_model(self, game_model) -> None:
+        """Добавить информацию об игре (инвентарь, персонаж)
+        :param game_model: информация об игре"""
         self.game_model = game_model
         self.inventory_view.add_inventory(self.game_model.inventory)
 
     def run(self, event) -> State:
         """
         Определение и вызов обработки Event'ов
+        :param event: Event, вызванный игроком
         :return: State
         """
         self.print_game()
@@ -54,21 +59,24 @@ class InventoryHandler:
                 return State.GAME
         return State.INVENTORY
 
-    def unequip_item(self):
+    def unequip_item(self) -> None:
+        """Снять с персонажа выбранный в инвентаре предмет"""
         if self.game_model.inventory.equipped_armor == self.inventory_view.current_item:
             self.game_model.hero.unequip_armor()
         elif self.game_model.inventory.equipped_weapon == self.inventory_view.current_item:
             self.game_model.hero.unequip_weapon()
         self.game_model.inventory.unequip_item(self.inventory_view.current_item)
 
-    def equip_item(self):
+    def equip_item(self) -> None:
+        """Надеть на персонажа выбранный в инвентаре предмет"""
         if isinstance(self.game_model.inventory.items[self.inventory_view.current_item], Weapon):
             self.game_model.hero.equip_weapon(self.game_model.inventory.items[self.inventory_view.current_item])
         elif isinstance(self.game_model.inventory.items[self.inventory_view.current_item], Armor):
             self.game_model.hero.equip_armor(self.game_model.inventory.items[self.inventory_view.current_item])
         self.game_model.inventory.equip_item(self.inventory_view.current_item)
 
-    def press_button(self):
+    def press_button(self) -> None:
+        """Нажать на кнопку для возможных действий с выбраннным предметом (discard, equip/unequip, cancel)"""
         if self.inventory_view.current_option_button == 0:
             self.unequip_item()
             self.game_model.inventory.discard_item(self.inventory_view.current_item)
