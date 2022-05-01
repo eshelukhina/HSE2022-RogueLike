@@ -1,7 +1,6 @@
 import pygame
 
 from src.config import Config
-from src.save_slot import SaveSlot
 from src.state import State
 from src.views.system_view import SystemView
 
@@ -16,16 +15,27 @@ class SystemHandler:
         self.current_item = "Start"
         self.system_view = SystemView(Config.WINDOW_SIZE)
         self.system_view.display_menu()
-        self.save_slots = SaveSlot().save_slots
         self.current_state = State.MENU
+        self.init_menu = False
+
+    def print_game(self) -> None:
+        """Показать окно с меню, если оно еще не показывается"""
+        if not self.init_menu:
+            self.system_view.display_menu()
+        self.init_menu = True
+
+    def close_menu(self) -> None:
+        """Поставить флаг, что окно с меню больше не показывается"""
+        self.init_menu = False
 
     def run(self, event) -> State:
         """
         Определение и вызов обработки Event'ов
-        :return: State
+        :param event: Event, вызванный игроком
+        :return State
         """
+        self.print_game()
         if event.type == pygame.QUIT:
-            # no more for this iteration
             self.current_state = State.EXIT
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_DOWN or event.key == pygame.K_UP:
@@ -34,14 +44,9 @@ class SystemHandler:
                 if self.system_view.current_window == "Menu":
                     if self.system_view.current_item == "Exit":
                         self.system_view.press_exit()
+                        self.close_menu()
                         self.current_state = State.EXIT
                     if self.system_view.current_item == "Start":
-                        self.system_view.press_start(self.save_slots)
-                    if self.system_view.current_item == "Reset progress":
-                        self.system_view.press_reset_(self.save_slots)
-                elif self.system_view.current_window == "Save slots":
-                    if self.system_view.current_save_slots_state == "Start":
+                        self.close_menu()
                         self.current_state = State.GAME
-                    elif self.system_view.current_save_slots_state == "Reset":
-                        self.save_slots = self.system_view.press_choose_reset_save_slot()
         return self.current_state
