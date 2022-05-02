@@ -34,7 +34,7 @@ class GameView:
     BAR_HEIGHT = Config.BLOCK_HEIGHT
 
     def __init_camera__(self, hero_pos):
-        self.camera = Camera(hero_pos)
+        self.camera: Camera = Camera(hero_pos)
 
     def __init_dict__(self, image_dict: Dict[str, str]):
         self.images = {}
@@ -88,6 +88,7 @@ class GameView:
     def view_load(self, game_model: GameModel):
         """
         Выводит на экран переданные объекты
+
         :param game_model: обьекты карты
         :return: None
         """
@@ -98,7 +99,8 @@ class GameView:
         screen_pos = self.__get_cell_screen_pos__(hero.cell_pos, self.cell_size)
         if self.camera is None:
             self.__init_camera__(hero_pos=screen_pos)
-        self.camera.set_shift(Vector2(screen_pos))
+        self.camera.change_shift(Vector2(screen_pos))
+        camera_shift: Vector2 = self.camera.get_shift()
         # draw cells
         cells_dict = game_model.cells_dict
         for cell_pos in cells_dict:
@@ -106,7 +108,7 @@ class GameView:
             cell_screen_pos = self.__get_cell_screen_pos__(cell_pos, self.cell_size)
             rect = pygame.rect.Rect(cell_screen_pos, self.cell_size)
             image = self.images[cell.image_name]
-            self.screen.blit(image, Vector2(rect.topleft) - self.camera.get_shift())
+            self.screen.blit(image, Vector2(rect.topleft) - camera_shift)
         # draw chests
         chests = game_model.chests
         for chest in chests:
@@ -114,11 +116,11 @@ class GameView:
             cell_screen_pos = self.__get_cell_screen_pos__(cell_pos, self.cell_size)
             rect = pygame.rect.Rect(cell_screen_pos, self.cell_size)
             image = self.images[chest.image_name]
-            self.screen.blit(image, Vector2(rect.topleft) - self.camera.get_shift())
+            self.screen.blit(image, Vector2(rect.topleft) - camera_shift)
         # draw hero
         rect = pygame.rect.Rect(screen_pos, self.cell_size)
         image = self.images[hero.image_name]
-        self.screen.blit(image, Vector2(rect.topleft) - self.camera.get_shift())
+        self.screen.blit(image, Vector2(rect.topleft) - camera_shift)
         # draw enemies
         for enemy in game_model.enemies:
             screen_pos = self.__get_cell_screen_pos__(enemy.cell_pos, self.cell_size)
@@ -127,7 +129,7 @@ class GameView:
             if enemy.health < enemy.max_health:
                 alpha = 100 * (1 - (enemy.health / float(enemy.max_health))) + 10
                 image = reddening(image, alpha)
-            self.screen.blit(image, Vector2(rect.topleft) - self.camera.get_shift())
+            self.screen.blit(image, Vector2(rect.topleft) - camera_shift)
         # draw health
         health = hero.health
         max_health = hero.max_health
