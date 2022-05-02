@@ -42,7 +42,6 @@ class App:
             for event in pygame.event.get():
                 if self.cur_state == State.MENU:
                     self.cur_state = self.system_handler.run(event)
-                    # todo not pretty but this what is needed to be done
                     if self.cur_state == State.GAME:
                         game_model = self.map_builder.build()
                         self.game_handler.set_game_model(game_model)
