@@ -47,7 +47,7 @@ class AbstractEnemyFactory:
         """
         pass
 
-    def create_coward_enemy(self, health, max_health: int, cell_pos, damage: int,
+    def create_coward_enemy(self, health: int, max_health: int, cell_pos, damage: int,
                             exp_gain: int, scare_radius: int) -> CowardEnemy:
         """
         Метод для создания трусливого моба
@@ -62,7 +62,7 @@ class AbstractEnemyFactory:
         """
         pass
 
-    def create_replicating_enemy(self, health, max_health: int, cell_pos, damage: int, exp_gain: int,
+    def create_replicating_enemy(self, health: int, max_health: int, cell_pos, damage: int, exp_gain: int,
                                  chance_of_cloning: float) -> ReplicatingEnemy:
         """
         Метод для создания рециплицируещегося моба

@@ -13,6 +13,7 @@ from src.entities.passive_enemy import PassiveEnemy
 from src.entities.replicating_enemy import ReplicatingEnemy
 from src.fabrics.abstract_enemy_factory import AbstractEnemyFactory
 from src.fabrics.fantasy_enemy_factory import FantasyEnemyFactory
+from src.loader.level_loader import LevelLoader
 from src.model.game_model import GameModel
 
 
@@ -67,10 +68,10 @@ def __load_chest__(chest_info, image_map, images):
     return Chest(image_name=image_name, cell_pos=chest_info['position'])
 
 
-class DefaultLeverLoader:
+class DefaultLeverLoader(LevelLoader):
     """
-        Класс DefaultLeverLoader ответственен за загрузку уровеней.
-        Извлекает необходмую информацию из json файлов согласно внутреннему инварианту.
+    Класс DefaultLeverLoader ответственен за загрузку уровеней.
+    Извлекает необходмую информацию из json файлов согласно внутреннему инварианту.
     """
 
     def __init__(self, *, path_to_levels: str, path_to_textures: str):
@@ -177,11 +178,6 @@ class DefaultLeverLoader:
 
     # todo every image key to image_name
     def load(self, file_name: str) -> GameModel:
-        """
-        Конструирует и возвращает модель уровня, а также все загруженные картинки.
-        :param file_name: имя файла уровня
-        :return: модель уровня, содержащую все считаные из файла обьекты
-        """
         level_file = os.path.join(self.path_to_levels, file_name)
         with open(level_file, 'r') as level:
             info = json.load(level)

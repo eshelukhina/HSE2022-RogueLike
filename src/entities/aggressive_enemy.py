@@ -9,6 +9,7 @@ from src.handlers.game_handler import __fight__
 
 class AggressiveEnemy(Enemy):
     """Класс, ответственный за тактику аггресивного противника"""
+
     def __init__(self, health: int, max_health: int, cell_pos, image_name: str, damage: int, exp_gain: int,
                  attack_radius: int):
         super().__init__(health, max_health, cell_pos, image_name, damage, exp_gain)

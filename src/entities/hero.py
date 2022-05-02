@@ -25,32 +25,61 @@ class Hero:
     def move(self, new_cell_pos: Tuple[int, int]) -> None:
         """
         Меняет расположение героя на карте
+
         :param new_cell_pos: новая позиция на карте
         :return: None
         """
         self.cell_pos = new_cell_pos
 
-    def add_exp(self, exp: int):
+    def add_exp(self, exp: int) -> None:
+        """
+        Метод для добавления опыта
+
+        :param exp: добавляемый опыт
+        :return: None
+        """
         self.exp += exp
         lvl_up = self.exp // Config.EXPERIENCE_TO_NEXT_LEVEL
         self.damage *= (1 + lvl_up * 0.1)
         self.level += lvl_up
 
-    def equip_weapon(self, weapon: Weapon):
+    def equip_weapon(self, weapon: Weapon) -> None:
+        """
+        Метод для экипировки оружия
+
+        :param weapon: оружие для экипировки
+        :return: None
+        """
         self.unequip_weapon()
         self.weapon = weapon
         self.damage += weapon.strength
 
-    def unequip_weapon(self):
+    def unequip_weapon(self) -> None:
+        """
+        Метод для снятия оружия
+
+        :return: None
+        """
         if self.weapon is not None:
             self.damage -= self.weapon.strength
             self.weapon = None
 
-    def equip_armor(self, armor: Armor):
+    def equip_armor(self, armor: Armor) -> None:
+        """
+        Метод для экипировки брони
+
+        :param armor: броня для экипировки
+        :return: None
+        """
         self.unequip_armor()
         self.armor = armor
         self.damage_taken_modifier = armor.defence
 
-    def unequip_armor(self):
+    def unequip_armor(self) -> None:
+        """
+        Метод для снятия брони
+
+        :return: None
+        """
         self.damage_taken_modifier = 0
         self.armor = None

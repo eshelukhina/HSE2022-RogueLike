@@ -11,8 +11,7 @@ def __get_dist__(cell_pos: Tuple[int, int], other_cell_pos):
 def __try_move__(next_pos, hero, enemies, cells) -> bool:
     if next_pos not in cells or cells[next_pos].cell_type == CellType.Wall:
         return False
-    if len(list(filter(lambda e: e.cell_pos[0] == next_pos[0] and
-                                 e.cell_pos[1] == next_pos[1], enemies))) > 0:
+    if len(list(filter(lambda e: e.cell_pos[0] == next_pos[0] and e.cell_pos[1] == next_pos[1], enemies))) > 0:
         return False
     if hero.cell_pos[0] == next_pos[0] and hero.cell_pos[1] == next_pos[1]:
         return False

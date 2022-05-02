@@ -12,6 +12,10 @@ from src.handlers.game_handler import GameHandler
 
 
 class ReplicatingEnemy(Enemy):
+    """
+    Моб, создающий свои копии
+    """
+
     def __init__(self, health: int, max_health: int, cell_pos, image_name: str, damage: int, exp_gain: int,
                  chance_of_cloning: float):
         super().__init__(health, max_health, cell_pos, image_name, damage, exp_gain)
@@ -37,6 +41,7 @@ class ReplicatingEnemy(Enemy):
     def clone(self, **attr) -> Enemy:
         """
         Создание клона моба
+
         :param attr: дополнительные параметры для создания клона
         :return: Enemy
         """
