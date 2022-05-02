@@ -9,6 +9,10 @@ from src.fabrics.abstract_enemy_factory import AbstractEnemyFactory
 
 
 class FantasyEnemyFactory(AbstractEnemyFactory):
+    """
+    Фабрика по созданию мобов
+    """
+
     def __init__(self):
         random.seed()
         self.images = {

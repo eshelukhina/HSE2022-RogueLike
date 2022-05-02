@@ -35,6 +35,11 @@ class ReplicatingEnemy(Enemy):
             enemies.append(self.clone(cell_pos=next_pos))
 
     def clone(self, **attr) -> Enemy:
+        """
+        Создание клона моба
+        :param attr: дополнительные параметры для создания клона
+        :return: Enemy
+        """
         clone = copy.deepcopy(self)
         clone.__dict__.update(attr)
         return clone

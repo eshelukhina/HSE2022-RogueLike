@@ -23,6 +23,11 @@ class ConfusedEnemy(Enemy):
                 return
 
     def get_enemy(self):
+        """
+        Метод, возвращающий моба до конфузии
+
+        :return: None
+        """
         self.enemy.health = self.health
         self.enemy.max_health = self.max_health
         self.enemy.cell_pos = self.cell_pos
