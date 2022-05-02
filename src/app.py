@@ -6,6 +6,7 @@ from src.handlers.inventory_handler import InventoryHandler
 from src.entities.inventory import Inventory
 from src.handlers.system_handler import SystemHandler
 from src.loader.default_level_loader import DefaultLeverLoader
+from src.loader.map_builder import MapBuilder
 from src.state import State
 from src.views.game_view import GameView
 
@@ -21,6 +22,7 @@ class App:
         self.cur_state = State.MENU
 
         self.level_loader = DefaultLeverLoader(path_to_levels='levels', path_to_textures='textures')
+        self.map_builder = MapBuilder(load=False)
 
         self.game_handler = GameHandler(
             game_view=GameView(window_size=Config.WINDOW_SIZE,
@@ -42,7 +44,7 @@ class App:
                     self.cur_state = self.system_handler.run(event)
                     # todo not pretty but this what is needed to be done
                     if self.cur_state == State.GAME:
-                        game_model = self.level_loader.load('default.json')
+                        game_model = self.map_builder.build()
                         self.game_handler.set_game_model(game_model)
                         self.inventory_handler.set_game_model(game_model)
                         self.game_handler.print_game()

@@ -93,8 +93,8 @@ class DefaultLeverLoader:
     }
 
     def __load_cells__(self, info, images) -> Dict[Tuple[int, int], Cell]:
-        num_cells_width = info['cells_amount'][0]
-        num_cells_height = info['cells_amount'][1]
+        num_cells_height = info['cells_amount'][0]
+        num_cells_width = info['cells_amount'][1]
         cell_types = info['map']['cell_types']
         cell_images = info['map']['cell_images']
         cells = {}
@@ -115,7 +115,7 @@ class DefaultLeverLoader:
                 if type_id not in self.CELL_TYPES_DICT:
                     raise ValueError(f'Type id {type_id} is unknown')
                 cell_type = self.CELL_TYPES_DICT[type_id]
-                cells[(j, i)] = Cell(cell_type=cell_type, image_name=image_name)
+                cells[(i, j)] = Cell(cell_type=cell_type, image_name=image_name)
         return cells
 
     def __load_hero__(self, info, images) -> Hero:
@@ -167,7 +167,7 @@ class DefaultLeverLoader:
                     images[image_name] = os.path.join(self.path_to_textures, image_name)
         return images
 
-    def __load_fabrics(self, info):
+    def __load_fabrics__(self, info):
         fabrics = {}
         for enemy in info['enemies']:
             fabrics[enemy['fabric']] = enemy['fabric']
@@ -185,7 +185,7 @@ class DefaultLeverLoader:
         level_file = os.path.join(self.path_to_levels, file_name)
         with open(level_file, 'r') as level:
             info = json.load(level)
-            fabrics = self.__load_fabrics(info)
+            fabrics = self.__load_fabrics__(info)
             images = self.__load_images__(info, fabrics)
             cells_dict = self.__load_cells__(info, images)
             chests = self.__load_chests__(info, images)
