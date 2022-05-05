@@ -10,15 +10,18 @@ from src.entities.hero import Hero
 from src.entities.weapon import Weapon
 from src.model.game_model import GameModel
 from src.state import State
+from src.views.inventory_view import InventoryView
 from src.views.system_view import SystemView
 
 
 class MovementCommand:
 
-    def __init__(self, game_model: Optional[GameModel], movement: Tuple[int, int], system_view: SystemView = None):
+    def __init__(self, game_model: Optional[GameModel], movement: Tuple[int, int],
+                 system_view: SystemView = None, inventory_view: InventoryView = None):
         self.game_model = game_model
         self.system_view = system_view
         self.movement = movement
+        self.inventory_view = inventory_view
 
     def __get_next_hero_pos__(self, hero: Hero) -> Tuple[int, int]:
         next_pos = (hero.cell_pos[0] + self.movement[0],
@@ -60,7 +63,10 @@ class MovementCommand:
                      defence=np.random.randint(low=1, high=self.game_model.hero.level + 2, size=1)[0], name="")
 
     def execute(self, key: int):
-        if self.system_view is not None:
+        if self.inventory_view is not None:
+            self.inventory_view.move_cursor(key)
+            return State.INVENTORY
+        elif self.system_view is not None:
             self.system_view.move_cursor(key)
             return State.MENU
         elif self.game_model is not None:
