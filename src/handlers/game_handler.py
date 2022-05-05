@@ -18,9 +18,8 @@ class GameHandler:
         self.game_view = game_view
         self.game_model = game_model
         self.commands = {
-            pygame.QUIT: ExitCommand(self.game_model),
-            pygame.KEYDOWN: KeydownCommand(self.game_model)
-
+            pygame.QUIT: ExitCommand(game_model=self.game_model),
+            pygame.KEYDOWN: KeydownCommand(game_model=self.game_model)
         }
 
     def set_game_model(self, game_model: GameModel):
@@ -28,7 +27,6 @@ class GameHandler:
         self.commands = {
             pygame.QUIT: ExitCommand(self.game_model),
             pygame.KEYDOWN: KeydownCommand(self.game_model)
-
         }
 
     def print_game(self):
