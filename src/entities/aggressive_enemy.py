@@ -4,7 +4,12 @@ from src.entities.cell import Cell
 from src.entities.cell import CellType
 from src.entities.coward_enemy import __get_dist__
 from src.entities.enemy import Enemy
-from src.handlers.game_handler import __fight__
+from src.entities.hero import Hero
+
+
+def __fight__(hero: Hero, enemy: Enemy):
+    hero.health -= enemy.damage - hero.damage_taken_modifier
+    enemy.health -= hero.damage
 
 
 class AggressiveEnemy(Enemy):
