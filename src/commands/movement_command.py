@@ -4,8 +4,8 @@ import numpy as np
 
 from src.entities.armor import Armor
 from src.entities.cell import CellType
-from src.entities.confused_enemy import ConfusedEnemy
-from src.entities.enemy import Enemy
+from src.entities.enemy.confused_state import ConfusedState
+from src.entities.enemy.enemy import Enemy
 from src.entities.hero import Hero
 from src.entities.weapon import Weapon
 from src.model.game_model import GameModel
@@ -41,10 +41,10 @@ class MovementCommand:
         hero.health -= enemy.damage - hero.damage_taken_modifier
         enemy.health -= hero.damage
 
-    def __set_confused_enemy__(self, enemies: List[Enemy], enemy: Enemy, confused_enemy):
+    def __set_confused_enemy__(self, enemies: List[Enemy], enemy: Enemy):
         for i in range(len(enemies)):
             if enemies[i] is enemy:
-                enemies[i] = confused_enemy
+                enemies[i].cur_state = ConfusedState()
                 return
 
     def generate_item(self):
@@ -86,7 +86,7 @@ class MovementCommand:
                     self.__fight__(hero, enemy)
                     # TODO confused mobs set a rule
                     if hero.damage > 10:
-                        self.__set_confused_enemy__(enemies, enemy, ConfusedEnemy(enemy))
+                        self.__set_confused_enemy__(enemies, enemy)
                 elif chest:
                     # TODO store items in chest, not generate the in place
                     chest_item = self.generate_item()
@@ -108,9 +108,4 @@ class MovementCommand:
             for dead_enemy in dead_enemies:
                 hero.add_exp(dead_enemy.exp_gain)
             self.game_model.enemies = list(filter(lambda e: e not in dead_enemies, enemies))
-            enemies = self.game_model.enemies
-            for i in range(len(enemies)):
-                enemy = enemies[i]
-                if isinstance(enemy, ConfusedEnemy) and enemy.time == 0:
-                    enemies[i] = enemy.get_enemy()
         return State.GAME

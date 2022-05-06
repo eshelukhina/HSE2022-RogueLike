@@ -3,9 +3,10 @@ import copy
 
 from src.entities.cell import Cell, CellType
 from src.entities.hero import Hero
-from src.entities.enemy.passive_state import PassiveEnemy
-from src.entities.enemy.aggressive_state import AggressiveEnemy
-from src.entities.enemy.coward_state import CowardEnemy
+from src.entities.enemy.enemy import Enemy
+from src.entities.enemy.passive_state import PassiveState
+from src.entities.enemy.aggressive_state import AggressiveState
+from src.entities.enemy.coward_state import CowardState
 from src.model.game_model import GameModel
 from src.handlers.game_handler import GameHandler
 from src.state import State
@@ -119,7 +120,7 @@ def test_move_in_wall():
 def test_passive_enemy():
     game_model = copy.deepcopy(no_walls_g_model)
     hero = game_model.hero
-    enemy = PassiveEnemy(health=20, max_health=20, cell_pos=(0, 2), image_name=1, damage=10, exp_gain=30)
+    enemy = Enemy(health=20, max_health=20, cell_pos=(0, 2), image_name=1, damage=10, exp_gain=30, state=PassiveState())
     game_model.enemies = [enemy]
     game_handler = GameHandler(game_model=game_model, game_view=MockView())
 
@@ -146,9 +147,9 @@ def test_passive_enemy():
 def test_aggressive_enemy():
     game_model = copy.deepcopy(no_walls_g_model)
     hero = game_model.hero
-    enemy = AggressiveEnemy(
+    enemy = Enemy(
         health=20, max_health=20, cell_pos=(0, 2),
-        image_name=1, damage=10, exp_gain=30, attack_radius=2)
+        image_name=1, damage=10, exp_gain=30, state=AggressiveState(attack_radius=2))
     game_model.enemies = [enemy]
     game_handler = GameHandler(game_model=game_model, game_view=MockView())
 
@@ -181,7 +182,8 @@ def test_aggressive_enemy():
 def test_coward_enemy():
     game_model = copy.deepcopy(no_walls_g_model)
     hero = game_model.hero
-    enemy = CowardEnemy(health=20, max_health=20, cell_pos=(3, 1), image_name=1, damage=10, exp_gain=30, scare_radius=3)
+    enemy = Enemy(health=20, max_health=20, cell_pos=(3, 1), image_name=1, damage=10,
+                  exp_gain=30, state=CowardState(scare_radius=3))
     game_model.enemies = [enemy]
     game_handler = GameHandler(game_model=game_model, game_view=MockView())
 
