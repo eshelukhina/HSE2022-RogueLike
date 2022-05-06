@@ -14,7 +14,7 @@ class MapBuilder:
     Класс, для генерации карт для уровня
     """
 
-    def __init__(self, load, load_path='', height=30, width=22, max_tunnels=80, max_length=12):
+    def __init__(self, load, load_path='default.json', height=30, width=22, max_tunnels=80, max_length=12):
         self.load = load
         self.load_path = load_path
         self.height, self.width, self.max_tunnels, self.max_length = height, width, max_tunnels, max_length

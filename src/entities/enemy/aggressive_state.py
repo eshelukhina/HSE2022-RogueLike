@@ -2,17 +2,16 @@ from typing import Tuple, List, Dict, Optional
 
 from src.entities.cell import Cell
 from src.entities.cell import CellType
-from src.entities.coward_enemy import __get_dist__
-from src.entities.enemy import Enemy
+from src.entities.enemy.coward_state import __get_dist__
+from src.entities.enemy.enemy import Enemy
+from src.entities.enemy.enemy_state import EnemyState
 from src.handlers.game_handler import __fight__
 
 
-class AggressiveEnemy(Enemy):
+class AggressiveState(EnemyState):
     """Класс, ответственный за тактику аггресивного противника"""
 
-    def __init__(self, health: int, max_health: int, cell_pos, image_name: str, damage: int, exp_gain: int,
-                 attack_radius: int):
-        super().__init__(health, max_health, cell_pos, image_name, damage, exp_gain)
+    def __init__(self, attack_radius: int):
         self.attack_radius = attack_radius
 
     def __try_move__(self, num_steps: int, pos: Tuple[int, int], enemies: List[Enemy],
@@ -55,18 +54,18 @@ class AggressiveEnemy(Enemy):
         )
         return steps[0] if steps else None
 
-    def move(self, hero, enemies, cells):
+    def move(self, enemy, hero, enemies, cells):
         close_enemies = []
-        for enemy in enemies:
-            dist = __get_dist__(self.cell_pos, enemy.cell_pos)
+        for another_enemy in enemies:
+            dist = __get_dist__(enemy.cell_pos, another_enemy.cell_pos)
             if 0 < dist <= self.attack_radius:
-                close_enemies.append(enemy)
+                close_enemies.append(another_enemy)
         next_step = self.__get_next_pos__(
-            (self.cell_pos[0], self.cell_pos[1]), hero.cell_pos, 0, close_enemies, cells, None
+            (enemy.cell_pos[0], enemy.cell_pos[1]), hero.cell_pos, 0, close_enemies, cells, None
         )
         if next_step is not None:
             next_pos = next_step[0]
             if next_pos[0] == hero.cell_pos[0] and next_pos[1] == hero.cell_pos[1]:
-                __fight__(hero, self)
+                __fight__(hero, enemy)
             else:
-                self.cell_pos = next_pos
+                enemy.cell_pos = next_pos
