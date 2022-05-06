@@ -5,8 +5,12 @@ from src.entities.cell import CellType
 from src.entities.enemy.coward_state import __get_dist__
 from src.entities.enemy.enemy import Enemy
 from src.entities.enemy.enemy_state import EnemyState
-from src.handlers.game_handler import __fight__
+from src.entities.hero import Hero
 
+
+def __fight__(hero: Hero, enemy: Enemy):
+    hero.health -= enemy.damage - hero.damage_taken_modifier
+    enemy.health -= hero.damage
 
 class AggressiveState(EnemyState):
     """Класс, ответственный за тактику аггресивного противника"""

@@ -12,6 +12,8 @@ class InventoryView:
 
     def __init__(self, window_size: Tuple[int, int]):
         """:param window_size: размер окна игры"""
+
+        self.init_inventory = False
         self.option_button = {}
         self.buttons = {"Equipped gear": ["Discard", "Put Off", "Cancel"],
                         "Unequipped gear": ["Discard", "Put On", "Cancel"],
@@ -54,6 +56,10 @@ class InventoryView:
                 x += 100
             self.items.append(rect)
             counter += 1
+
+    def close_inventory(self) -> None:
+        """Поставить флаг, что окно с инвентарем больше не показывается"""
+        self.init_inventory = False
 
     def add_inventory(self, inventory) -> None:
         """Добавить инвентарь, который впоследствии будет отображаться
