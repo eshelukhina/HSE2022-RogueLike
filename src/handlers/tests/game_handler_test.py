@@ -3,9 +3,9 @@ import copy
 
 from src.entities.cell import Cell, CellType
 from src.entities.hero import Hero
-from src.entities.passive_enemy import PassiveEnemy
-from src.entities.aggressive_enemy import AggressiveEnemy
-from src.entities.coward_enemy import CowardEnemy
+from src.entities.enemy.passive_state import PassiveEnemy
+from src.entities.enemy.aggressive_state import AggressiveEnemy
+from src.entities.enemy.coward_state import CowardEnemy
 from src.model.game_model import GameModel
 from src.handlers.game_handler import GameHandler
 from src.state import State

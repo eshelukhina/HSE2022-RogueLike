@@ -43,5 +43,3 @@ class GameHandler:
             return self.commands[event.type].execute(event.key)
         else:
             return State.GAME
-
-
