@@ -14,7 +14,7 @@ class ExitCommand:
         self.system_view = system_view
         self.inventory_view = inventory_view
 
-    def execute(self, key: int):
+    def execute(self, key: int = None):
         if self.inventory_view is not None:
             self.inventory_view.close_inventory()
         return State.EXIT

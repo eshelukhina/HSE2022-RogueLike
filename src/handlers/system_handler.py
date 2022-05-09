@@ -41,5 +41,8 @@ class SystemHandler:
         """
         self.print_game()
         if event.type in self.commands:
-            self.current_state = self.commands[event.type].execute(event.key)
+            if event.type == pygame.QUIT:
+                self.current_state = self.commands[event.type].execute()
+            else:
+                self.current_state = self.commands[event.type].execute(event.key)
         return self.current_state

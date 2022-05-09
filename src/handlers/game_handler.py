@@ -40,6 +40,8 @@ class GameHandler:
         """
         self.print_game()
         if event.type in self.commands:
+            if event.type == pygame.QUIT:
+                return self.commands[event.type].execute()
             return self.commands[event.type].execute(event.key)
         else:
             return State.GAME
