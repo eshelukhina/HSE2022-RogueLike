@@ -7,6 +7,7 @@ from src.views.system_view import SystemView
 
 
 class ExitCommand:
+    """Класс, ответственный за команду выхода из игры"""
 
     def __init__(self, game_model: Optional[GameModel] = None, system_view: SystemView = None,
                  inventory_view: InventoryView = None):
@@ -14,7 +15,12 @@ class ExitCommand:
         self.system_view = system_view
         self.inventory_view = inventory_view
 
-    def execute(self, key: int = None):
+    def execute(self, key: int = None) -> State:
+        """
+        Логика обработки выхода из игры
+        :param key: pygame.key: Int, кнопка которую нажал игрок
+        :return State
+        """
         if self.inventory_view is not None:
             self.inventory_view.close_inventory()
         return State.EXIT

@@ -13,6 +13,7 @@ from src.views.system_view import SystemView
 
 
 class KeydownCommand:
+    """Класс, ответственный за логику управления в игре и меню"""
 
     def __init__(self, game_model: Optional[GameModel] = None, system_view: SystemView = None,
                  inventory_view: InventoryView = None):
@@ -33,7 +34,12 @@ class KeydownCommand:
                                            inventory_view=self.inventory_view)
         }
 
-    def execute(self, key: int):
+    def execute(self, key: int) -> State:
+        """
+        Логика обработки нажатия кнопок
+        :param key: pygame.key: Int, кнопка которую нажал игрок
+        :return State
+        """
         if key in self.commands:
             return self.commands[key].execute(key=key)
         else:

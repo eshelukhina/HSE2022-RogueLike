@@ -15,6 +15,7 @@ from src.views.system_view import SystemView
 
 
 class MovementCommand:
+    """Класс, ответственный за логику движения в игре и меню"""
 
     def __init__(self, game_model: Optional[GameModel], movement: Tuple[int, int],
                  system_view: SystemView = None, inventory_view: InventoryView = None):
@@ -54,15 +55,28 @@ class MovementCommand:
             return self.generate_weapon()
         return self.generate_armor()
 
-    def generate_weapon(self):
+    def generate_weapon(self) -> Weapon:
+        """
+        Генерация оружия
+        :return Weapon
+        """
         return Weapon(image="weapon1.jpg",
                       strength=np.random.randint(low=1, high=self.game_model.hero.level + 2, size=1)[0], name="")
 
-    def generate_armor(self):
+    def generate_armor(self) -> Armor:
+        """
+        Генерация брони
+        :return Armor
+        """
         return Armor(image="armor1.jpg",
                      defence=np.random.randint(low=1, high=self.game_model.hero.level + 2, size=1)[0], name="")
 
-    def execute(self, key: int):
+    def execute(self, key: int) -> State:
+        """
+        Логика обработки движений во время игры и меню
+        :param key: pygame.key: Int, кнопка которую нажал игрок
+        :return State
+        """
         if self.inventory_view is not None:
             self.inventory_view.move_cursor(key)
             return State.INVENTORY

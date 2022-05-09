@@ -9,6 +9,8 @@ from src.views.system_view import SystemView
 
 
 class ReturnCommand:
+    """Класс, ответственный за логику выбора пользователя в игре"""
+
     def __init__(self, game_model: Optional[GameModel] = None, system_view: SystemView = None,
                  inventory_view: InventoryView = None):
         self.game_model = game_model
@@ -44,7 +46,12 @@ class ReturnCommand:
         self.inventory_view.show_item_buttons = False
         self.inventory_view.display_inventory()
 
-    def execute(self, key: int):
+    def execute(self, key: int) -> State:
+        """
+        Логика обработки выбора пользователя
+        :param key: pygame.key: Int, кнопка которую нажал игрок
+        :return State
+        """
         if self.inventory_view is not None:
             if self.inventory_view.show_item_buttons:
                 self.press_button()
