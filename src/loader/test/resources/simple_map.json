@@ -1,0 +1,27 @@
+{
+  "images": {
+    "0": "empty_block.png",
+    "1": "wall.png",
+    "2": "hero.png"
+  },
+  "cells_amount": [2, 2],
+  "map": {
+    "cell_types": [
+      "0","0",
+      "1","1"
+    ],
+    "cell_images": [
+      "0","0",
+      "1","1"
+    ]
+  },
+  "hero": {
+    "position" : [0, 0],
+    "image_key" : "2",
+    "health": 100,
+    "exp": 0,
+    "damage": 12
+  },
+  "enemies": [],
+  "chests": []
+}
