@@ -9,6 +9,8 @@ class SystemView:
     """
 
     def __init__(self, window_size: Tuple[int, int]):
+        self.init_menu = False
+
         self.items = ["Start", "Exit"]
         self.windows = ["Menu"]
 
@@ -39,6 +41,10 @@ class SystemView:
         exit_rect.center = mid_w, mid_h + 100
 
         self.buttons = {self.items[0]: (start_text, start_rect), self.items[1]: (learn_about_text, learn_about_rect)}
+
+    def close_menu(self) -> None:
+        """Поставить флаг, что окно с меню больше не показывается"""
+        self.init_menu = False
 
     def display_menu(self) -> None:
         """

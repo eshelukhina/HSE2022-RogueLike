@@ -1,4 +1,7 @@
-class Armor:
+from src.entities.item import Item
+
+
+class Armor(Item):
     """Класс, ответственный за броню персонажа"""
 
     def __init__(self, name, defence, image):

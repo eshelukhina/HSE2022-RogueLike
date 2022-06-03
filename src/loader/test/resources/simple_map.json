@@ -22,5 +22,6 @@
     "exp": 0,
     "damage": 12
   },
-  "enemies": []
+  "enemies": [],
+  "chests": []
 }
