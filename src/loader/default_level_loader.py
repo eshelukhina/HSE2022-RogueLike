@@ -2,15 +2,11 @@ import json
 import os
 from typing import Dict, Tuple
 
-from src.entities.aggressive_enemy import AggressiveEnemy
 from src.entities.cell import Cell, CellType
 from src.entities.chest import Chest
-from src.entities.coward_enemy import CowardEnemy
-from src.entities.enemy import Enemy
+from src.entities.enemy.enemy import Enemy
 from src.entities.hero import Hero
 from src.entities.inventory import Inventory
-from src.entities.passive_enemy import PassiveEnemy
-from src.entities.replicating_enemy import ReplicatingEnemy
 from src.fabrics.abstract_enemy_factory import AbstractEnemyFactory
 from src.fabrics.fantasy_enemy_factory import FantasyEnemyFactory
 from src.loader.level_loader import LevelLoader
@@ -22,7 +18,7 @@ def __load_base_enemy_info__(enemy_info):
             enemy_info['fabric'], enemy_info['damage'], enemy_info['exp_gain'])
 
 
-def __load_passive_enemy__(enemy_info, fabrics: Dict[str, AbstractEnemyFactory]) -> PassiveEnemy:
+def __load_passive_enemy__(enemy_info, fabrics: Dict[str, AbstractEnemyFactory]) -> Enemy:
     health, cell_pos, fabric, damage, exp_gain = __load_base_enemy_info__(enemy_info)
     if fabric not in fabrics:
         raise ValueError(f"Unknown fabric {fabric}")
@@ -30,7 +26,7 @@ def __load_passive_enemy__(enemy_info, fabrics: Dict[str, AbstractEnemyFactory])
         health=health, max_health=health, cell_pos=cell_pos, damage=damage, exp_gain=exp_gain)
 
 
-def __load_coward_enemy__(enemy_info, fabrics: Dict[str, AbstractEnemyFactory]) -> CowardEnemy:
+def __load_coward_enemy__(enemy_info, fabrics: Dict[str, AbstractEnemyFactory]) -> Enemy:
     health, cell_pos, fabric, damage, exp_gain = __load_base_enemy_info__(enemy_info)
     if fabric not in fabrics:
         raise ValueError(f"Unknown fabric {fabric}")
@@ -40,7 +36,7 @@ def __load_coward_enemy__(enemy_info, fabrics: Dict[str, AbstractEnemyFactory]) 
         scare_radius=scare_radius, damage=damage, exp_gain=exp_gain)
 
 
-def __load_aggressive_enemy__(enemy_info, fabrics: Dict[str, AbstractEnemyFactory]) -> AggressiveEnemy:
+def __load_aggressive_enemy__(enemy_info, fabrics: Dict[str, AbstractEnemyFactory]) -> Enemy:
     health, cell_pos, fabric, damage, exp_gain = __load_base_enemy_info__(enemy_info)
     attack_radius = enemy_info['attack_radius']
     if fabric not in fabrics:
@@ -50,7 +46,7 @@ def __load_aggressive_enemy__(enemy_info, fabrics: Dict[str, AbstractEnemyFactor
         exp_gain=exp_gain)
 
 
-def __load_replicating_enemy__(enemy_info, fabrics: Dict[str, AbstractEnemyFactory]) -> ReplicatingEnemy:
+def __load_replicating_enemy__(enemy_info, fabrics: Dict[str, AbstractEnemyFactory]) -> Enemy:
     health, cell_pos, fabric, damage, exp_gain = __load_base_enemy_info__(enemy_info)
     chance_of_cloning = enemy_info['chance_of_cloning']
     if fabric not in fabrics:

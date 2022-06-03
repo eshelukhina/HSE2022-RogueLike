@@ -1,3 +1,6 @@
+import pygame
+
+
 class Config:
     """
     Класс, хранящий в себе разделяемые всем приложением константные значения
@@ -10,6 +13,13 @@ class Config:
     PATH_TO_TEXTURES = "textures"
     EXPERIENCE_TO_NEXT_LEVEL = 100
     CONFUSED_TIME = 3
+
+    movement = {
+        pygame.K_LEFT: (-1, 0),
+        pygame.K_RIGHT: (1, 0),
+        pygame.K_UP: (0, -1),
+        pygame.K_DOWN: (0, 1)
+    }
 
     class Colors:
         RED = (153, 0, 0)

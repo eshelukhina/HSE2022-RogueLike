@@ -1,7 +1,7 @@
 from typing import Tuple
 
 from src.entities.cell import CellType
-from src.entities.enemy import Enemy
+from src.entities.enemy.enemy_state import EnemyState
 
 
 def __get_dist__(cell_pos: Tuple[int, int], other_cell_pos):
@@ -18,19 +18,17 @@ def __try_move__(next_pos, hero, enemies, cells) -> bool:
     return True
 
 
-class CowardEnemy(Enemy):
+class CowardState(EnemyState):
     """Класс, ответственный за тактику пугливого противника"""
 
-    def __init__(self, health, max_health: int, cell_pos, image_name: str, damage: int, exp_gain: int,
-                 scare_radius: int):
-        super().__init__(health, max_health, cell_pos, image_name, damage, exp_gain)
+    def __init__(self, scare_radius: int):
         self.scare_radius = scare_radius
 
-    def move(self, hero, enemies, cells):
-        cur_dist = __get_dist__(self.cell_pos, hero.cell_pos)
+    def move(self, enemy, hero, enemies, cells):
+        cur_dist = __get_dist__(enemy.cell_pos, hero.cell_pos)
         if cur_dist <= 1:
             return
-        cur_x, cur_y = self.cell_pos
+        cur_x, cur_y = enemy.cell_pos
         potential_positions = [
             (cur_x + 1, cur_y), (cur_x - 1, cur_y),
             (cur_x, cur_y + 1), (cur_x, cur_y - 1)
@@ -51,5 +49,5 @@ class CowardEnemy(Enemy):
         for pot_pos_with_dist in potential_position_with_dist:
             pot_pos = pot_pos_with_dist[0], pot_pos_with_dist[1]
             if __try_move__(pot_pos, hero, enemies, cells):
-                self.cell_pos = pot_pos
+                enemy.cell_pos = pot_pos
                 return

@@ -1,7 +1,7 @@
 from typing import List, Dict, Tuple
 
 from src.entities.cell import Cell
-from src.entities.enemy import Enemy
+from src.entities.enemy.enemy import Enemy
 from src.entities.hero import Hero
 from src.entities.chest import Chest
 from src.entities.inventory import Inventory
