@@ -1,6 +1,9 @@
+from typing import Optional
+
 import pygame
 
-from src.entities.cell import CellType
+from src.commands.exit_command import ExitCommand
+from src.commands.keydown_command import KeydownCommand
 from src.model.game_model import GameModel
 from src.state import State
 from src.views.game_view import GameView
@@ -10,36 +13,35 @@ class GameHandler:
     """
     Класс ответственный за обработку game event'ов
     """
-    movement = {
-        pygame.K_LEFT: (-1, 0),
-        pygame.K_RIGHT: (1, 0),
-        pygame.K_UP: (0, -1),
-        pygame.K_DOWN: (0, 1)
-    }
 
-    def __init__(self, game_model: GameModel, game_view: GameView):
+    def __init__(self, game_view: GameView, game_model: Optional[GameModel]):
         self.game_view = game_view
         self.game_model = game_model
+        self.commands = {
+            pygame.QUIT: ExitCommand(game_model=self.game_model),
+            pygame.KEYDOWN: KeydownCommand(game_model=self.game_model)
+        }
 
-    def __move_hero__(self, key_event: int, game_model: GameModel) -> None:
-        hero = game_model.hero
-        cells_dict = game_model.cells_dict
-        next_pos = (hero.cell_pos[0] + self.movement[key_event][0],
-                    hero.cell_pos[1] + self.movement[key_event][1])
-        if next_pos not in cells_dict or cells_dict[next_pos].cell_type == CellType.Wall:
-            return
-        hero.cell_pos = next_pos
+    def set_game_model(self, game_model: GameModel):
+        self.game_model = game_model
+        self.commands = {
+            pygame.QUIT: ExitCommand(self.game_model),
+            pygame.KEYDOWN: KeydownCommand(self.game_model)
+        }
 
-    def run(self, event: pygame.event.Event) -> State:
+    def print_game(self):
+        self.game_view.view_load(self.game_model)
+
+    def run(self, event: pygame.event.Event):
         """
         Обрабатывает нажатия с клавиатуры и отображает изменения на экране
         :param event: событие нажатия клавиатуры
         :return: состояние игры
         """
-        if event.type == pygame.QUIT:
-            return State.EXIT
-        elif event.type == pygame.KEYDOWN:
-            if event.key in self.movement:
-                self.__move_hero__(event.key, self.game_model)
-        self.game_view.view_load(self.game_model)
-        return State.GAME
+        self.print_game()
+        if event.type in self.commands:
+            if event.type == pygame.QUIT:
+                return self.commands[event.type].execute()
+            return self.commands[event.type].execute(event.key)
+        else:
+            return State.GAME

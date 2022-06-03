@@ -12,8 +12,7 @@ class Cell:
     """
     Элемент карты
     """
-    images = []
 
-    def __init__(self, *, image_key: int, cell_type: CellType):
-        self.image_key = image_key
+    def __init__(self, *, image_name: str, cell_type: CellType):
+        self.image_name = image_name
         self.cell_type = cell_type
